@@ -107,7 +107,7 @@ RSpec.describe FrenchTaxSystem do
   describe '#calc_not_capped_income_tax_amount_per_year_with_property_income_of(net_taxable_property_income_amount)' do
     context 'when it has no property income' do
       it 'returns not capped by fiscal parts capping income tax per year with a given property income' do
-        result_agen = simulation_agen.calc_not_capped_income_tax_amount_per_year_with_property_income_of(0)
+        result_agen = FrenchTaxSystem.calc_not_capped_income_tax_amount_per_year_with_property_income_of(simulation_agen)
         expect(result_agen).to be_within(1).of(6_562.6)
       end
     end

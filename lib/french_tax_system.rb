@@ -31,7 +31,7 @@ module FrenchTaxSystem
 
   # Methods
   ## Main method
-  def test
+  def testit
     "test me"
   end
 
