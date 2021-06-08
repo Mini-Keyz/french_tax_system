@@ -94,7 +94,15 @@ module FrenchTaxSystem
     when "Marié / Pacsé"
       FISCAL_NB_PARTS_FOR_MARRIED_COUPLE + calc_fiscal_nb_parts_incurred_from_children(simulation)
     when "Célibataire"
-      FISCAL_NB_PARTS_FOR_SINGLE_PERSON + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      elsif simulation[:fiscal_nb_dependent_children] >= 1
+        # +0.5 part for "parent isole" with at least one dependent child
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.5 + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      elsif simulation[:fiscal_nb_alternate_custody_children] >= 1 && simulation[:fiscal_nb_dependent_children] == 0
+        # +0.25 part for "parent isole" with at least one alternate custody child but no dependent child
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.25 + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      end
     end
   end
 
