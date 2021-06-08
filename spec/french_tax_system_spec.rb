@@ -119,7 +119,7 @@ RSpec.describe FrenchTaxSystem do
         result_lille = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lille, "without_property_income")
         result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income")
         expect(result_lyon).to be_within(1).of(10_302)
-        expect(result_bordeaux).to be_within(1).of(894) # 1503 without the decote
+        expect(result_bordeaux).to be_within(1).of(894)
         expect(result_nimes).to be_within(1).of(19_312)
         expect(result_lille).to be_within(1).of(2_117)
         expect(result_agen).to be_within(1).of(11_731)

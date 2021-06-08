@@ -35,6 +35,16 @@ module FrenchTaxSystem
 
   }.freeze
 
+  DISCOUNT_ON_LOW_INCOME_TAX = {
+    year2021: {
+      discount_percentage: 0.4525,
+      threshold_single_person_household: 1722,
+      lump_sum_single_person_household: 779,
+      threshold_married_couple_household: 2849,
+      lump_sum_married_couple_household: 1289
+    }
+  }.freeze
+
   REVENUES_STANDARD_ALLOWANCE = 0.1
 
   REAL_REGIMEN_DEDUCTIBLE_EXPENSES_FOR_YEAR_TWO = %w[house_landlord_charges_amount_per_year
@@ -100,8 +110,23 @@ module FrenchTaxSystem
     not_capped_income_tax = (aggregated_tax_amount_real_fiscal_parts * fiscal_nb_parts).round
     capped_income_tax = (aggregated_tax_amount_for_fiscal_parts_capping * fiscal_nb_parts_for_capping).round - capping_due_to_fiscal_parts
 
-    # Return the highest possible income tax amount
-    [not_capped_income_tax, capped_income_tax].max
+    # Get the highest possible income tax amount
+    almost_final_income_tax = [not_capped_income_tax, capped_income_tax].max
+
+    # Apply discount on low income tax if necessary
+    apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
+  end
+
+  def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
+    if simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
+      discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_single_person_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
+      almost_final_income_tax - discount_to_apply
+    elsif simulation[:fiscal_marital_status] == "Marié / Pacsé" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_married_couple_household]
+      discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_married_couple_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
+      almost_final_income_tax - discount_to_apply
+    else
+      almost_final_income_tax
+    end
   end
 
   def calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
