@@ -57,11 +57,11 @@ module FrenchTaxSystem
     case calculation_method
     when "with_property_income"
       net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation)
-      global_net_taxable_income_amount = calc_global_net_taxable_amount_with_property_income_of(simulation,
-                                                                                                net_taxable_property_income_amount)
+      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
+                                                                        net_taxable_property_income_amount)
     when "without_property_income"
-      global_net_taxable_income_amount = calc_global_net_taxable_amount_with_property_income_of(simulation,
-                                                                                                0)
+      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
+                                                                        0)
     else
       raise ArgumentError, "Not a valid argument, it should be 'with_property_income' or 'without_property_income'"
     end
@@ -77,7 +77,7 @@ module FrenchTaxSystem
   end
 
   def calc_net_taxable_property_income_amount(simulation)
-    case fiscal_status
+    case simulation[:fiscal_status]
     when "Vide"
       NueFormulas.calc_net_taxable_property_income_amount(simulation)
     when "LMNP"
@@ -129,7 +129,7 @@ module FrenchTaxSystem
         1 + simulation[:fiscal_nb_alternate_custody_children] * 0.5
 
       elsif simulation[:fiscal_nb_dependent_children] >= 3
-        2 + simulation[:fiscal_nb_alternate_custody_children] * 0.5
+        1 + (simulation[:fiscal_nb_dependent_children] - 2) + simulation[:fiscal_nb_alternate_custody_children] * 0.5
       end
     end
   end
@@ -160,10 +160,10 @@ module FrenchTaxSystem
     case calculation_method
     when "with_property_income"
       net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation)
-      global_net_taxable_income_amount = calc_global_net_taxable_amount_with_property_income_of(simulation,
-                                                                                                net_taxable_property_income_amount)
+      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
+                                                                        net_taxable_property_income_amount)
     when "without_property_income"
-      global_net_taxable_income_amount = calc_global_net_taxable_amount_with_property_income_of(simulation, 0)
+      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation, 0)
     else
       raise ArgumentError, "Not a valid argument, it should be 'with_property_income' or 'without_property_income'"
     end

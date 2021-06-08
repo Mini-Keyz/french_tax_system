@@ -130,6 +130,46 @@ RSpec.describe FrenchTaxSystem do
   end
 
   describe "#calc_fiscal_nb_parts(simulation)" do
+    let(:simulation_fiscal_parts_one) do
+      {
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 2,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
+    let(:simulation_fiscal_parts_two) do
+      {
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 1,
+        fiscal_nb_alternate_custody_children: 0
+      }
+    end
+
+    let(:simulation_fiscal_parts_three) do
+      {
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 0,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
+    let(:simulation_fiscal_parts_four) do
+      {
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 6,
+        fiscal_nb_alternate_custody_children: 4
+      }
+    end
+
+    let(:simulation_fiscal_parts_five) do
+      {
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 1,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
     it "returns household's fiscal parts number" do
       result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lyon)
       result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_bordeaux)
@@ -138,7 +178,18 @@ RSpec.describe FrenchTaxSystem do
       expect(result_lyon).to eq(3.5)
       expect(result_bordeaux).to eq(4)
       expect(result_nimes).to eq(4.5)
-      expect(result_lille).to eq(2.5)
+      expect(result_lille).to eq(2.75)
+
+      result_simulation_one = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_one)
+      result_simulation_two = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_two)
+      result_simulation_three = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_three)
+      result_simulation_four = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_four)
+      result_simulation_five = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_five)
+      expect(result_simulation_one).to eq(3)
+      expect(result_simulation_two).to eq(2)
+      expect(result_simulation_three).to eq(1.5)
+      expect(result_simulation_four).to eq(8.5)
+      expect(result_simulation_five).to eq(2.25)
     end
   end
 
