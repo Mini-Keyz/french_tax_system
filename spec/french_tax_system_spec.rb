@@ -109,6 +109,18 @@ RSpec.describe FrenchTaxSystem do
     }
   end
 
+  describe "#calc_income_tax_amount_per_year(simulation, calculation_method)" do
+    context "when it has no property income" do
+      it "returns the income tax per year" do
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income")
+        expect(result_agen).to be_within(1).of(11_731)
+      end
+    end
+
+    # context "when it has some property income" do
+    # end
+  end
+
   describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
     context "when it has no property income" do
       it "returns the net taxable amount" do
@@ -129,7 +141,7 @@ RSpec.describe FrenchTaxSystem do
     end
   end
 
-  describe "#calc_fiscal_nb_parts(simulation)" do
+  describe "Fiscal nb parts and related" do
     let(:simulation_fiscal_parts_one) do
       {
         fiscal_marital_status: "Célibataire",
@@ -170,39 +182,142 @@ RSpec.describe FrenchTaxSystem do
       }
     end
 
-    it "returns household's fiscal parts number" do
-      result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lyon)
-      result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_bordeaux)
-      result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_nimes)
-      result_lille = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lille)
-      expect(result_lyon).to eq(3.5)
-      expect(result_bordeaux).to eq(4)
-      expect(result_nimes).to eq(4.5)
-      expect(result_lille).to eq(2.75)
-
-      result_simulation_one = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_one)
-      result_simulation_two = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_two)
-      result_simulation_three = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_three)
-      result_simulation_four = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_four)
-      result_simulation_five = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_five)
-      expect(result_simulation_one).to eq(3)
-      expect(result_simulation_two).to eq(2)
-      expect(result_simulation_three).to eq(1.5)
-      expect(result_simulation_four).to eq(8.5)
-      expect(result_simulation_five).to eq(2.25)
+    let(:simulation_fiscal_parts_six) do
+      {
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 2,
+        fiscal_nb_alternate_custody_children: 1
+      }
     end
-  end
 
-  describe "#calc_fiscal_nb_parts_incurred_from_children(simulation)" do
-    it "returns household's fiscal parts number incurred from dependant and alternate custody children" do
-      result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lyon)
-      result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_bordeaux)
-      result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_nimes)
-      result_lille = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lille)
-      expect(result_lyon).to eq(1.5)
-      expect(result_bordeaux).to eq(2)
-      expect(result_nimes).to eq(2.5)
-      expect(result_lille).to eq(1.5)
+    let(:simulation_fiscal_parts_seven) do
+      {
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 1,
+        fiscal_nb_alternate_custody_children: 0
+      }
+    end
+
+    let(:simulation_fiscal_parts_eight) do
+      {
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 0,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
+    let(:simulation_fiscal_parts_nine) do
+      {
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 6,
+        fiscal_nb_alternate_custody_children: 4
+      }
+    end
+
+    let(:simulation_fiscal_parts_ten) do
+      {
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 1,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
+    describe "#calc_fiscal_nb_parts(simulation)" do
+      it "returns household's fiscal parts number" do
+        result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lyon)
+        result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_bordeaux)
+        result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_nimes)
+        result_lille = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lille)
+        expect(result_lyon).to eq(3.5)
+        expect(result_bordeaux).to eq(4)
+        expect(result_nimes).to eq(4.5)
+        expect(result_lille).to eq(3)
+
+        result_simulation_one = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_one)
+        result_simulation_two = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_two)
+        result_simulation_three = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_three)
+        result_simulation_four = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_four)
+        result_simulation_five = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_five)
+        expect(result_simulation_one).to eq(3)
+        expect(result_simulation_two).to eq(2)
+        expect(result_simulation_three).to eq(1.5)
+        expect(result_simulation_four).to eq(8.5)
+        expect(result_simulation_five).to eq(2.25)
+
+        result_simulation_six = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_six)
+        result_simulation_seven = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_seven)
+        result_simulation_eight = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_eight)
+        result_simulation_nine = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_nine)
+        result_simulation_ten = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_ten)
+        expect(result_simulation_six).to eq(3.5)
+        expect(result_simulation_seven).to eq(2.5)
+        expect(result_simulation_eight).to eq(2.25)
+        expect(result_simulation_nine).to eq(9)
+        expect(result_simulation_ten).to eq(2.75)
+      end
+    end
+
+    describe "#calc_fiscal_nb_parts_incurred_from_children(simulation)" do
+      it "returns household's fiscal parts number incurred from dependant and alternate custody children" do
+        result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lyon)
+        result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_bordeaux)
+        result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_nimes)
+        result_lille = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lille)
+        expect(result_lyon).to eq(1.5)
+        expect(result_bordeaux).to eq(2)
+        expect(result_nimes).to eq(2.5)
+        expect(result_lille).to eq(1.5)
+      end
+    end
+
+    describe "#calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)" do
+      it "returns the maximal income tax reduction incurred from fiscal nb of parts generated by children" do
+        current_year = Date.today.year
+
+        fiscal_nb_parts_one = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_one)
+        fiscal_nb_parts_two = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_two)
+        fiscal_nb_parts_three = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_three)
+        fiscal_nb_parts_four = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_four)
+        fiscal_nb_parts_five = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_five)
+
+        result_simulation_one = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_one,
+                                                                                 fiscal_nb_parts_one, current_year)
+        result_simulation_two = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_two,
+                                                                                 fiscal_nb_parts_two, current_year)
+        result_simulation_three = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_three,
+                                                                                   fiscal_nb_parts_three, current_year)
+        result_simulation_four = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_four,
+                                                                                  fiscal_nb_parts_four, current_year)
+        result_simulation_five = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_five,
+                                                                                  fiscal_nb_parts_five, current_year)
+        expect(result_simulation_one).to eq(6_844)
+        expect(result_simulation_two).to eq(3_704)
+        expect(result_simulation_three).to eq(1_852)
+        expect(result_simulation_four).to eq(24_114)
+        expect(result_simulation_five).to eq(4_489)
+
+        fiscal_nb_parts_six = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_six)
+        fiscal_nb_parts_seven = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_seven)
+        fiscal_nb_parts_eight = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_eight)
+        fiscal_nb_parts_nine = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_nine)
+        fiscal_nb_parts_ten = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_ten)
+
+        result_simulation_six = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_six,
+                                                                                 fiscal_nb_parts_six, current_year)
+        result_simulation_seven = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_seven,
+                                                                                   fiscal_nb_parts_seven, current_year)
+        result_simulation_eight = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_eight,
+                                                                                   fiscal_nb_parts_eight, current_year)
+        result_simulation_nine = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_nine,
+                                                                                  fiscal_nb_parts_nine, current_year)
+        result_simulation_ten = FrenchTaxSystem.calc_capping_due_to_fiscal_parts(simulation_fiscal_parts_ten,
+                                                                                 fiscal_nb_parts_ten, current_year)
+        expect(result_simulation_six).to eq(4_710)
+        expect(result_simulation_seven).to eq(1_570)
+        expect(result_simulation_eight).to eq(785)
+        expect(result_simulation_nine).to eq(21_980)
+        expect(result_simulation_ten).to eq(2_355)
+      end
     end
   end
 

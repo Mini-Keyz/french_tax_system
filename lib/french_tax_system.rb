@@ -23,7 +23,16 @@ module FrenchTaxSystem
 
   FAMILY_QUOTIENT_CAPPING_AMOUNT = {
     ## Per half fiscal parts for children
-    year2021: 1570
+    year2021: {
+      married_household: {
+        half_part: 1570
+      },
+      single_person_household: {
+        marked_up_half_part: 1852,
+        half_part: 1570
+      }
+    }
+
   }.freeze
 
   REVENUES_STANDARD_ALLOWANCE = 0.1
@@ -54,6 +63,7 @@ module FrenchTaxSystem
   # params [String] indicates if the calculation is made with or without the property income
   # @return [Float] the final income tax to pay (euros)
   def calc_income_tax_amount_per_year(simulation, calculation_method)
+    # Calculate net taxable property income and global net taxable income
     case calculation_method
     when "with_property_income"
       net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation)
@@ -66,14 +76,50 @@ module FrenchTaxSystem
       raise ArgumentError, "Not a valid argument, it should be 'with_property_income' or 'without_property_income'"
     end
 
+    # Calculate the number of fiscal parts
     fiscal_nb_parts = calc_fiscal_nb_parts(simulation)
+    fiscal_nb_parts_for_capping = simulation[:fiscal_marital_status] == "Célibataire" ? 1 : 2
 
-    family_quotient_amount = calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)
+    # Calculate the family quotient amount
+    family_quotient_amount_real_fiscal_parts = calc_family_quotient_amount(global_net_taxable_income_amount,
+                                                                           fiscal_nb_parts)
+    family_quotient_amount_for_fiscal_parts_capping = calc_family_quotient_amount(global_net_taxable_income_amount,
+                                                                                  fiscal_nb_parts_for_capping)
+
+    # Calculcate the aggregated tax amount
     current_year = Date.today.year
+    aggregated_tax_amount_real_fiscal_parts = calc_aggregated_tax_amount(family_quotient_amount_real_fiscal_parts,
+                                                                         current_year)
+    aggregated_tax_amount_for_fiscal_parts_capping = calc_aggregated_tax_amount(
+      family_quotient_amount_for_fiscal_parts_capping, current_year
+    )
 
-    aggregated_tax_amount = calc_aggregated_tax_amount(family_quotient_amount, current_year)
+    # Calculcate previsional income tax
+    capping_due_to_fiscal_parts = calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts,
+                                                                   current_year)
+    not_capped_income_tax = (aggregated_tax_amount_real_fiscal_parts * fiscal_nb_parts).round
+    capped_income_tax = (aggregated_tax_amount_for_fiscal_parts_capping * fiscal_nb_parts_for_capping).round - capping_due_to_fiscal_parts
 
-    (aggregated_tax_amount * fiscal_nb_parts).round
+    # Return the highest possible income tax amount
+    [not_capped_income_tax, capped_income_tax].max
+  end
+
+  def calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
+    case simulation[:fiscal_marital_status]
+    when "Marié / Pacsé"
+      (fiscal_nb_parts - FISCAL_NB_PARTS_FOR_MARRIED_COUPLE) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:married_household][:half_part] * 2
+    when "Célibataire"
+      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
+        0
+      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 2
+        # First part is marked-up for single parent, and then normal calculation
+        FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part] * 2 +
+          (fiscal_nb_parts - 1 - FISCAL_NB_PARTS_FOR_SINGLE_PERSON) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:half_part] * 2
+      elsif simulation[:fiscal_nb_alternate_custody_children] == 1 && simulation[:fiscal_nb_dependent_children] == 0
+        # First part is marked-up for single parent, and then normal calculation
+        FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part]
+      end
+    end
   end
 
   def calc_net_taxable_property_income_amount(simulation)
@@ -95,12 +141,12 @@ module FrenchTaxSystem
       FISCAL_NB_PARTS_FOR_MARRIED_COUPLE + calc_fiscal_nb_parts_incurred_from_children(simulation)
     when "Célibataire"
       if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
-        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + calc_fiscal_nb_parts_incurred_from_children(simulation)
-      elsif simulation[:fiscal_nb_dependent_children] >= 1
-        # +0.5 part for "parent isole" with at least one dependent child
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON
+      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 2
+        # +0.5 part for "parent isole" 1) with at least one dependent child OR 2) with at least two alternate custody child
         FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.5 + calc_fiscal_nb_parts_incurred_from_children(simulation)
-      elsif simulation[:fiscal_nb_alternate_custody_children] >= 1 && simulation[:fiscal_nb_dependent_children] == 0
-        # +0.25 part for "parent isole" with at least one alternate custody child but no dependent child
+      elsif simulation[:fiscal_nb_alternate_custody_children] == 1 && simulation[:fiscal_nb_dependent_children] == 0
+        # +0.25 part for "parent isole" with one alternate custody child but no dependent child
         FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.25 + calc_fiscal_nb_parts_incurred_from_children(simulation)
       end
     end
@@ -136,10 +182,6 @@ module FrenchTaxSystem
 
   def calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)
     global_net_taxable_income_amount / fiscal_nb_parts
-  end
-
-  def calc_family_quotient_capped_amount(_e)
-    "ee"
   end
 
   def calc_aggregated_tax_amount(family_quotient_amount, current_year)
