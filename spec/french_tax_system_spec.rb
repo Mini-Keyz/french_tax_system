@@ -112,7 +112,16 @@ RSpec.describe FrenchTaxSystem do
   describe "#calc_income_tax_amount_per_year(simulation, calculation_method)" do
     context "when it has no property income" do
       it "returns the income tax per year" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lyon, "without_property_income")
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_bordeaux,
+                                                                          "without_property_income")
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_nimes, "without_property_income")
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lille, "without_property_income")
         result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income")
+        expect(result_lyon).to be_within(1).of(10_302)
+        expect(result_bordeaux).to be_within(1).of(11_731)
+        expect(result_nimes).to be_within(1).of(11_731)
+        expect(result_lille).to be_within(1).of(11_731)
         expect(result_agen).to be_within(1).of(11_731)
       end
     end

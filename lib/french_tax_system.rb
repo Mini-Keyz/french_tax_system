@@ -132,7 +132,7 @@ module FrenchTaxSystem
   end
 
   def calc_global_net_taxable_amount(simulation, net_taxable_property_income_amount)
-    ((simulation[:fiscal_revenues_p1] + simulation[:fiscal_revenues_p2]) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
+    ((simulation[:fiscal_revenues_p1] + (simulation.key?(:fiscal_revenues_p2) ? simulation[:fiscal_revenues_p2] : 0)) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
   end
 
   def calc_fiscal_nb_parts(simulation)
