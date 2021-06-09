@@ -18,9 +18,9 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
 
   describe "#calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)" do
     it "returns the net taxable property income amount incurred from the potential investment" do
-      result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 1)
+      result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 1)
       expect(result_lyon_first_year).to be_a(Hash)
-      # expect(result_lyon_first_year).to be_within(0.01).of(2500)
+      expect(result_lyon_first_year).to be_within(0.01).of(2500)
     end
   end
 end
