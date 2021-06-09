@@ -2,6 +2,8 @@
 
 require "date"
 require_relative "french_tax_system/version"
+require_relative "nue_formulas"
+require_relative "lmnp_formulas"
 
 module FrenchTaxSystem
   extend self
@@ -32,7 +34,6 @@ module FrenchTaxSystem
         half_part: 1570
       }
     }
-
   }.freeze
 
   DISCOUNT_ON_LOW_INCOME_TAX = {
@@ -47,8 +48,14 @@ module FrenchTaxSystem
 
   REVENUES_STANDARD_ALLOWANCE = 0.1
 
-  REAL_REGIMEN_DEDUCTIBLE_EXPENSES_FOR_YEAR_TWO = %w[house_landlord_charges_amount_per_year
-                                                     house_property_management_amount_per_year house_insurance_gli_amount_per_year house_insurance_pno_amount_per_year house_property_tax_amount_per_year credit_loan_cumulative_interests_paid_for_year_two credit_loan_insurance_amount_per_year].freeze
+  REAL_REGIMEN_DEDUCTIBLE_EXPENSES = {
+    fiscal_year1: %w[house_first_works house_landlord_charges_amount_per_year
+                     house_property_management_amount_per_year house_insurance_gli_amount_per_year house_insurance_pno_amount_per_year house_property_tax_amount_per_year credit_loan_cumulative_interests_paid_for_year_two credit_loan_insurance_amount_per_year],
+    fiscal_year2: %w[house_landlord_charges_amount_per_year
+                     house_property_management_amount_per_year house_insurance_gli_amount_per_year house_insurance_pno_amount_per_year house_property_tax_amount_per_year credit_loan_cumulative_interests_paid_for_year_two credit_loan_insurance_amount_per_year]
+  }.freeze
+
+  SOCIAL_CONTRIBUTIONS_PERCENTAGE = 0.172
 
   # Methods
 
@@ -60,6 +67,7 @@ module FrenchTaxSystem
   # @options simulation [Integer] :house_total_charges_amount_per_year how much are the total charges (euros/year)
   # @options simulation [Integer] :house_property_tax_amount_per_year how much is the property tax (euros/year)
   # @options simulation [Integer] :house_rent_amount_per_month how much is the rent paid by the tenant (euros/month)
+  # @options simulation [Integer] :house_rent_amount_per_year how much is the rent paid by the tenant (euros/year)
   # @options simulation [Integer] :house_property_management_amount_per_year how much is property management cost (euros/year)
   # @options simulation [Integer] :credit_loan_amount how much is credit loan amount (euros)
   # @options simulation [Integer] :credit_loan_duration how long is the credit (years)
@@ -72,11 +80,11 @@ module FrenchTaxSystem
   # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
   # params [String] indicates if the calculation is made with or without the property income
   # @return [Float] the final income tax to pay (euros)
-  def calc_income_tax_amount_per_year(simulation, calculation_method)
+  def calc_income_tax_amount_per_year(simulation, calculation_method, investment_fiscal_year)
     # Calculate net taxable property income and global net taxable income
     case calculation_method
     when "with_property_income"
-      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation)
+      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
       global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
                                                                         net_taxable_property_income_amount)
     when "without_property_income"
@@ -88,7 +96,7 @@ module FrenchTaxSystem
 
     # Calculate the number of fiscal parts
     fiscal_nb_parts = calc_fiscal_nb_parts(simulation)
-    fiscal_nb_parts_for_capping = simulation[:fiscal_marital_status] == "Célibataire" ? 1 : 2
+    fiscal_nb_parts_for_capping = simulation[:fiscal_marital_status] == "Célibataire" ? FISCAL_NB_PARTS_FOR_SINGLE_PERSON : FISCAL_NB_PARTS_FOR_MARRIED_COUPLE
 
     # Calculate the family quotient amount
     family_quotient_amount_real_fiscal_parts = calc_family_quotient_amount(global_net_taxable_income_amount,
@@ -115,6 +123,18 @@ module FrenchTaxSystem
 
     # Apply discount on low income tax if necessary
     apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
+  end
+
+  def social_contributions_amount_per_year(simulation, investment_fiscal_year)
+    # Calculate net taxable property income that will be reported to French taxes
+    net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+
+    # Return the social contributions to pay in addition to income taxes (it really never ends...)
+    if net_taxable_property_income_amount <= 0
+      0
+    else
+      net_taxable_property_income_amount * SOCIAL_CONTRIBUTIONS_PERCENTAGE
+    end
   end
 
   def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
@@ -147,12 +167,12 @@ module FrenchTaxSystem
     end
   end
 
-  def calc_net_taxable_property_income_amount(simulation)
+  def calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
     case simulation[:fiscal_status]
     when "Vide"
-      NueFormulas.calc_net_taxable_property_income_amount(simulation)
+      NueFormulas.calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
     when "LMNP"
-      LmnpFormulas.calc_net_taxable_property_income_amount(simulation)
+      LmnpFormulas.calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
     end
   end
 
@@ -223,10 +243,10 @@ module FrenchTaxSystem
     end.sum
   end
 
-  def calc_income_taxes_scale(simulation, calculation_method)
+  def calc_income_taxes_scale(simulation, calculation_method, investment_fiscal_year)
     case calculation_method
     when "with_property_income"
-      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation)
+      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
       global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
                                                                         net_taxable_property_income_amount)
     when "without_property_income"

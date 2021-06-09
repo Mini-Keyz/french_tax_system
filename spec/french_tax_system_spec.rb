@@ -13,6 +13,7 @@ RSpec.describe FrenchTaxSystem do
       house_total_charges_amount_per_year: 2750,
       house_property_tax_amount_per_year: 2500,
       house_rent_amount_per_month: 2500,
+      house_rent_amount_per_year: 30_000,
       house_property_management_cost_percentage: 0,
       credit_loan_amount: 550_000,
       credit_loan_duration: 20,
@@ -34,6 +35,7 @@ RSpec.describe FrenchTaxSystem do
       house_total_charges_amount_per_year: 500,
       house_property_tax_amount_per_year: 300,
       house_rent_amount_per_month: 450,
+      house_rent_amount_per_year: 5_400,
       house_property_management_cost_percentage: 0.08,
       credit_loan_amount: 100_000,
       credit_loan_duration: 20,
@@ -55,6 +57,7 @@ RSpec.describe FrenchTaxSystem do
       house_total_charges_amount_per_year: 1_500,
       house_property_tax_amount_per_year: 1_000,
       house_rent_amount_per_month: 2_000,
+      house_rent_amount_per_year: 24_000,
       house_property_management_cost_percentage: 0.08,
       credit_loan_amount: 200_000,
       credit_loan_duration: 20,
@@ -76,6 +79,7 @@ RSpec.describe FrenchTaxSystem do
       house_total_charges_amount_per_year: 1_200,
       house_property_tax_amount_per_year: 500,
       house_rent_amount_per_month: 600,
+      house_rent_amount_per_year: 7200,
       house_property_management_cost_percentage: 0,
       credit_loan_amount: 180_000,
       credit_loan_duration: 20,
@@ -96,6 +100,7 @@ RSpec.describe FrenchTaxSystem do
       house_total_charges_amount_per_year: 1_200,
       house_property_tax_amount_per_year: 500,
       house_rent_amount_per_month: 600,
+      house_rent_amount_per_year: 7200,
       house_property_management_cost_percentage: 0,
       credit_loan_amount: 180_000,
       credit_loan_duration: 20,
@@ -109,15 +114,15 @@ RSpec.describe FrenchTaxSystem do
     }
   end
 
-  describe "#calc_income_tax_amount_per_year(simulation, calculation_method)" do
+  describe "#calc_income_tax_amount_per_year(simulation, calculation_method, investment_fiscal_year)" do
     context "when it has no property income" do
       it "returns the income tax per year" do
-        result_lyon = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lyon, "without_property_income")
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lyon, "without_property_income", 2)
         result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_bordeaux,
-                                                                          "without_property_income")
-        result_nimes = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_nimes, "without_property_income")
-        result_lille = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lille, "without_property_income")
-        result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income")
+                                                                          "without_property_income", 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_nimes, "without_property_income", 2)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lille, "without_property_income", 2)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income", 2)
         expect(result_lyon).to be_within(1).of(10_302)
         expect(result_bordeaux).to be_within(1).of(894)
         expect(result_nimes).to be_within(1).of(19_312)
@@ -366,18 +371,18 @@ RSpec.describe FrenchTaxSystem do
 
   describe "#calc_income_taxes_scale(simulation, calculation_method)" do
     context "when it has no property income" do
-      it "returns the family quotient amount" do
-        result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "without_property_income")
-        result_bordeaux = FrenchTaxSystem.calc_income_taxes_scale(simulation_bordeaux, "without_property_income")
+      it "returns the corresponding income tax scale on which revenues are taxed" do
+        result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "without_property_income", 2)
+        result_bordeaux = FrenchTaxSystem.calc_income_taxes_scale(simulation_bordeaux, "without_property_income", 2)
         expect(result_lyon).to eq({ family_quotient_amount: { start_scale: 25_711, end_scale: 73_516 }, tax: 0.3 })
         expect(result_bordeaux).to eq({ family_quotient_amount: { start_scale: 10_085, end_scale: 25_710 }, tax: 0.11 })
       end
     end
 
     context "when it has some property income" do
-      it "returns the family quotient amount" do
-        result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "with_property_income")
-        result_bordeaux = FrenchTaxSystem.calc_income_taxes_scale(simulation_bordeaux, "with_property_income")
+      it "returns the corresponding income tax scale on which revenues are taxed" do
+        result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "with_property_income", 2)
+        result_bordeaux = FrenchTaxSystem.calc_income_taxes_scale(simulation_bordeaux, "with_property_income", 2)
         expect(result_lyon).to eq({ family_quotient_amount: { start_scale: 25_711, end_scale: 73_516 }, tax: 0.3 })
         expect(result_bordeaux).to eq({ family_quotient_amount: { start_scale: 10_085, end_scale: 25_710 }, tax: 0.11 })
       end
