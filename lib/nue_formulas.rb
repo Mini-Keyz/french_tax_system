@@ -38,15 +38,30 @@ module FrenchTaxSystem
         raise ArgumentError, "Not a valid argument, it should be a positive integer superior or equal to 1"
       end
 
-      case simulation[:fiscal_regimen]
-      when "Réel"
-        deductible_expenses = FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES["fiscal_year#{investment_fiscal_year}".to_sym].map do |expense|
-          simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
-        end.sum
-        simulation[:house_rent_amount_per_year] - deductible_expenses
-      when "Forfait"
-        simulation[:house_rent_amount_per_year] * (1 - PROPERTY_INCOME_STANDARD_ALLOWANCE)
-      end
+      net_taxable_property_income_amount = case simulation[:fiscal_regimen]
+                                           when "Réel"
+                                             deductible_expenses = FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES["fiscal_year#{investment_fiscal_year}".to_sym].map do |expense|
+                                               simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
+                                             end.sum
+                                             simulation[:house_rent_amount_per_year] - deductible_expenses
+                                           when "Forfait"
+                                             simulation[:house_rent_amount_per_year] * (1 - PROPERTY_INCOME_STANDARD_ALLOWANCE)
+                                           end
+
+      # Hash[
+      #   "fiscal_year#{investment_fiscal_year}".to_sym, [
+      #     [:net_taxable_property_income_amount, net_taxable_property_income_amount],
+      #     [:negative_property_income?, false],
+      #     [:negative_property_income_amount, 300]
+      #   ]
+      # ]
+      {
+        "fiscal_year#{investment_fiscal_year}".to_sym => {
+          net_taxable_property_income_amount: net_taxable_property_income_amount,
+          negative_property_income?: false,
+          negative_property_income_amount: 300
+        }
+      }
     end
   end
 end
