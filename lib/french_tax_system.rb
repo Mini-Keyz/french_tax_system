@@ -49,7 +49,7 @@ module FrenchTaxSystem
   REVENUES_STANDARD_ALLOWANCE = 0.1
 
   REAL_REGIMEN_DEDUCTIBLE_EXPENSES = {
-    fiscal_year1: %w[house_first_works house_landlord_charges_amount_per_year
+    fiscal_year1: %w[house_first_works_amount house_landlord_charges_amount_per_year
                      house_property_management_amount_per_year house_insurance_gli_amount_per_year house_insurance_pno_amount_per_year house_property_tax_amount_per_year credit_loan_cumulative_interests_paid_for_year_two credit_loan_insurance_amount_per_year],
     fiscal_year2: %w[house_landlord_charges_amount_per_year
                      house_property_management_amount_per_year house_insurance_gli_amount_per_year house_insurance_pno_amount_per_year house_property_tax_amount_per_year credit_loan_cumulative_interests_paid_for_year_two credit_loan_insurance_amount_per_year]
@@ -60,11 +60,11 @@ module FrenchTaxSystem
   # Methods
 
   # Calculate the income tax to pay with or without the generated income from the property investment
-  #
+  # TO UPDATE
   # @params [Hash] simulation a simulation created by Mini-Keyz app
   # @options simulation [Integer] :house_price_bought_amount how much was the house bought (euros)
   # @options simulation [Integer] :house_first_works_amount how much were the first works realized (euros)
-  # @options simulation [Integer] :house_total_charges_amount_per_year how much are the total charges (euros/year)
+  # @options simulation [Integer] :house_landlord_charges_amount_per_year how much are the landlord charges (euros/year)
   # @options simulation [Integer] :house_property_tax_amount_per_year how much is the property tax (euros/year)
   # @options simulation [Integer] :house_rent_amount_per_month how much is the rent paid by the tenant (euros/month)
   # @options simulation [Integer] :house_rent_amount_per_year how much is the rent paid by the tenant (euros/year)
@@ -78,7 +78,8 @@ module FrenchTaxSystem
   # @options simulation [String] :fiscal_marital_status fiscal relation between the 'parents' of the household
   # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
   # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
-  # params [String] indicates if the calculation is made with or without the property income
+  # @params [String] investment_fiscal_year indicates if the calculation is made with or without the property income
+  #
   # @return [Float] the final income tax to pay (euros)
   def calc_income_tax_amount_per_year(simulation, calculation_method, investment_fiscal_year)
     # Calculate net taxable property income and global net taxable income
