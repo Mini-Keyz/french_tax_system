@@ -78,32 +78,32 @@ module FrenchTaxSystem
       net_property_income_minus_loan_interet_cost = simulation[:house_rent_amount_per_year] - simulation[:credit_loan_cumulative_interests_paid_for_year_two]
 
       # If net_property_income_minus_loan_interet_cost is positive, we deduct all expenses from this fiscal year net_taxable_property_income_amount and report what's left to next fiscal years
-      if net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount >= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      if net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount >= - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: net_taxable_property_income_amount,
           negative_taxable_property_income?: net_taxable_property_income_amount.negative?,
           negative_taxable_property_income_amount_to_postpone: 0
         }
-      elsif net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount <= - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT,
           negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: (net_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
         }
       # If net_property_income_minus_loan_interet_cost is negative, we deduct all expenses EXCEPT credit interest costs from this fiscal year net_taxable_property_income_amount and report what's left + credit interest cost to next fiscal years
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount >= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount >= - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: net_taxable_property_income_amount,
           negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: simulation[:credit_loan_cumulative_interests_paid_for_year_two]
         }
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two]) < CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount <= - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two]) < - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT,
           negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: (net_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
         }
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two]) > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount <= - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two]) > - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two],
           negative_taxable_property_income?: true,
