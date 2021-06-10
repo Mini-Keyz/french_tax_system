@@ -55,19 +55,36 @@ RSpec.describe FrenchTaxSystem do
       }
     end
 
-    describe "#calc_income_tax_amount_per_year(simulation, calculation_method, investment_fiscal_year)" do
-      it "returns the income tax per year" do
-        result_lyon = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lyon, "without_property_income", 2)
-        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_bordeaux,
+    describe "#calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)" do
+      it "returns a nice hash made of income tax and social contributions" do
+        result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "without_property_income", 2)
+        result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux,
                                                                           "without_property_income", 2)
-        result_nimes = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_nimes, "without_property_income", 2)
-        result_lille = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_lille, "without_property_income", 2)
-        result_agen = FrenchTaxSystem.calc_income_tax_amount_per_year(simulation_agen, "without_property_income", 2)
-        expect(result_lyon).to be_within(1).of(10_302)
-        expect(result_bordeaux).to be_within(1).of(894)
-        expect(result_nimes).to be_within(1).of(19_312)
-        expect(result_lille).to be_within(1).of(2_117)
-        expect(result_agen).to be_within(1).of(11_731)
+        result_nimes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_nimes, "without_property_income", 2)
+        result_lille = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lille, "without_property_income", 2)
+        result_agen = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_agen, "without_property_income", 2)
+        expect(result_lyon[0][:income_tax][:income_tax_amount]).to be_within(1).of(10_302)
+        expect(result_bordeaux[0][:income_tax][:income_tax_amount]).to be_within(1).of(894)
+        expect(result_nimes[0][:income_tax][:income_tax_amount]).to be_within(1).of(19_312)
+        expect(result_lille[0][:income_tax][:income_tax_amount]).to be_within(1).of(2_117)
+        expect(result_agen[0][:income_tax][:income_tax_amount]).to be_within(1).of(11_731)
+      end
+    end
+    
+
+    describe "#calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+      it "returns the income tax per year" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 2)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux,
+                                                                          "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 2)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 2)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 2)
+        expect(result_lyon[:income_tax_amount]).to be_within(1).of(10_302)
+        expect(result_bordeaux[:income_tax_amount]).to be_within(1).of(894)
+        expect(result_nimes[:income_tax_amount]).to be_within(1).of(19_312)
+        expect(result_lille[:income_tax_amount]).to be_within(1).of(2_117)
+        expect(result_agen[:income_tax_amount]).to be_within(1).of(11_731)
       end
     end
 

@@ -95,8 +95,8 @@ module FrenchTaxSystem
       ## Calculate income tax params for this fiscal_year
       income_tax_params = calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
 
-      ## Calculate social contributions for this fiscal year
-      social_contributions_amount = calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+      ## Calculate social contributions for this fiscal year if property
+      social_contributions_amount = calculation_method == "with_property_income" ? calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year) : 0
 
       ## Return a nice big chunky hash
       {
