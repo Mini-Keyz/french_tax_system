@@ -84,7 +84,8 @@ module FrenchTaxSystem
 
   def calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
     # Iterate over investment first to top fiscal year and return an array which concatenates all hashes generated per fiscal year
-    income_tax_array = (1..investment_top_fiscal_year).map.with_index do |investment_fiscal_year, index|
+    income_tax_array = []
+    (1..investment_top_fiscal_year).map.with_index do |investment_fiscal_year, index|
       ## Set postponed neg tax p income to 0 for the first year and to previous year result for other years
       if investment_fiscal_year == 1
         postponed_negative_taxable_property_income_from_previous_fiscal_year = 0
@@ -98,12 +99,13 @@ module FrenchTaxSystem
       ## Calculate social contributions for this fiscal year if property
       social_contributions_amount = calculation_method == "with_property_income" ? calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year) : 0
 
-      ## Return a nice big chunky hash
-      {
+      ## Fill array with a nice big chunky hash
+      income_tax_array << {
         income_tax: income_tax_params,
         social_contributions_amount: social_contributions_amount
       }
     end
+    income_tax_array
   end
 
   def calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
