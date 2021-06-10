@@ -81,11 +81,26 @@ module FrenchTaxSystem
   # @params [String] investment_fiscal_year indicates if the calculation is made with or without the property income
   #
   # @return [Float] the final income tax to pay (euros)
-  def calc_income_tax_amount_per_year(simulation, calculation_method, investment_fiscal_year)
+
+  def calc_income_tax_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
+    # Iterate over investment first to top fiscal year and return an array which concatenates all hashes generated per fiscal year
+    income_tax_array = (1..investment_top_fiscal_year).map.with_index do |investment_fiscal_year, index|
+      ## For the first year, set postponed neg tax p income to 0
+      postponed_negative_taxable_property_income_from_previous_fiscal_year = 0 if investment_fiscal_year == 1
+
+      ## For other years, set postponed neg tax p income to previous year result
+      postponed_negative_taxable_property_income_from_previous_fiscal_year = income_tax_array[index - 1][:negative_taxable_property_income_amount_to_postpone] if investment_fiscal_year >= 2
+
+      ## Calculate income tax amount for this fiscal_year
+      calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+    end
+  end
+
+  def calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     # Calculate net taxable property income and global net taxable income
     case calculation_method
     when "with_property_income"
-      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
       global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
                                                                         net_taxable_property_income_amount)
     when "without_property_income"
