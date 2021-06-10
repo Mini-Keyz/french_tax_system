@@ -85,11 +85,12 @@ module FrenchTaxSystem
   def calc_income_tax_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
     # Iterate over investment first to top fiscal year and return an array which concatenates all hashes generated per fiscal year
     income_tax_array = (1..investment_top_fiscal_year).map.with_index do |investment_fiscal_year, index|
-      ## For the first year, set postponed neg tax p income to 0
-      postponed_negative_taxable_property_income_from_previous_fiscal_year = 0 if investment_fiscal_year == 1
-
-      ## For other years, set postponed neg tax p income to previous year result
-      postponed_negative_taxable_property_income_from_previous_fiscal_year = income_tax_array[index - 1][:negative_taxable_property_income_amount_to_postpone] if investment_fiscal_year >= 2
+      ## Set postponed neg tax p income to 0 for the first year and to previous year result for other years
+      if investment_fiscal_year == 1
+        postponed_negative_taxable_property_income_from_previous_fiscal_year = 0
+      elsif investment_fiscal_year >= 2
+        postponed_negative_taxable_property_income_from_previous_fiscal_year = income_tax_array[index - 1][:negative_taxable_property_income_amount_to_postpone]
+      end
 
       ## Calculate income tax amount for this fiscal_year
       calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
