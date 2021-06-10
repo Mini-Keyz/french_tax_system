@@ -82,7 +82,7 @@ module FrenchTaxSystem
   #
   # @return [Float] the final income tax to pay (euros)
 
-  def calc_income_tax_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
+  def calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
     # Iterate over investment first to top fiscal year and return an array which concatenates all hashes generated per fiscal year
     income_tax_array = (1..investment_top_fiscal_year).map.with_index do |investment_fiscal_year, index|
       ## Set postponed neg tax p income to 0 for the first year and to previous year result for other years
@@ -94,6 +94,9 @@ module FrenchTaxSystem
 
       ## Calculate income tax amount for this fiscal_year
       calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+
+      ## Calculate social contributions for this fiscal year
+      calc_social_contributions_amount_for_year(simulation, investment_fiscal_year)
     end
   end
 
@@ -142,7 +145,7 @@ module FrenchTaxSystem
     apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
   end
 
-  def social_contributions_amount_per_year(simulation, investment_fiscal_year)
+  def calc_social_contributions_amount_for_year(simulation, investment_fiscal_year)
     # Calculate net taxable property income that will be reported to French taxes
     net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
 
@@ -184,12 +187,12 @@ module FrenchTaxSystem
     end
   end
 
-  def calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+  def calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     case simulation[:fiscal_status]
     when "Vide"
-      NueFormulas.calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+      NueFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     when "LMNP"
-      LmnpFormulas.calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+      LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     end
   end
 
