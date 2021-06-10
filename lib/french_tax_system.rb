@@ -89,14 +89,20 @@ module FrenchTaxSystem
       if investment_fiscal_year == 1
         postponed_negative_taxable_property_income_from_previous_fiscal_year = 0
       elsif investment_fiscal_year >= 2
-        postponed_negative_taxable_property_income_from_previous_fiscal_year = income_tax_array[index - 1][:negative_taxable_property_income_amount_to_postpone]
+        postponed_negative_taxable_property_income_from_previous_fiscal_year = income_tax_array[index - 1][:income_tax][:negative_taxable_property_income_amount_to_postpone]
       end
 
-      ## Calculate income tax amount for this fiscal_year
-      calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+      ## Calculate income tax params for this fiscal_year
+      income_tax_params = calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
 
       ## Calculate social contributions for this fiscal year
-      calc_social_contributions_amount_for_year(simulation, investment_fiscal_year)
+      social_contributions_amount = calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+
+      ## Return a nice big chunky hash
+      {
+        income_tax: income_tax_params,
+        social_contributions_amount: social_contributions_amount
+      }
     end
   end
 
@@ -106,7 +112,7 @@ module FrenchTaxSystem
     when "with_property_income"
       net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
       global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
-                                                                        net_taxable_property_income_amount)
+                                                                        net_taxable_property_income_amount[:net_taxable_property_income_amount])
     when "without_property_income"
       global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
                                                                         0)
@@ -142,12 +148,23 @@ module FrenchTaxSystem
     almost_final_income_tax = [not_capped_income_tax, capped_income_tax].max
 
     # Apply discount on low income tax if necessary
-    apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
+    final_income_tax = apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
+
+    # Return a hash of values
+    {
+      global_net_taxable_income_amount: global_net_taxable_income_amount,
+      net_taxable_property_income_amount: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:net_taxable_property_income_amount] : 0,
+      negative_taxable_property_income?: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:negative_taxable_property_income?] : false,
+      negative_taxable_property_income_amount_to_postpone: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:negative_taxable_property_income_amount_to_postpone] : 0,
+      fiscal_nb_parts: fiscal_nb_parts,
+      income_tax_amount: final_income_tax,
+      discount_on_low_income_tax_amount: (almost_final_income_tax - final_income_tax).positive? ? almost_final_income_tax - final_income_tax : 0
+    }
   end
 
-  def calc_social_contributions_amount_for_year(simulation, investment_fiscal_year)
+  def calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     # Calculate net taxable property income that will be reported to French taxes
-    net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
+    net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
 
     # Return the social contributions to pay in addition to income taxes (it really never ends...)
     if net_taxable_property_income_amount <= 0
