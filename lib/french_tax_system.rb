@@ -174,6 +174,7 @@ module FrenchTaxSystem
   end
 
   def calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+    # Is only triggered from main formula so it assumes that this is a "with_property_income" case
     # Calculate net taxable property income that will be reported to French taxes
     net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
 

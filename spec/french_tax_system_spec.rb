@@ -103,7 +103,7 @@ RSpec.describe FrenchTaxSystem do
 
   describe "Without any property income" do
     describe "#calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)" do
-      it "returns a nice hash made of income tax and social contributions" do
+      it "returns a nice hash made of income tax params" do
         result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "without_property_income", 10)
         result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux, "without_property_income", 10)
         result_nimes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_nimes, "without_property_income", 10)
@@ -125,6 +125,30 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[7][:income_tax][:income_tax_amount]).to be_within(0.01).of(37_786.56)
         expect(result_rennes[8][:income_tax][:income_tax_amount]).to be_within(0.01).of(0)
         expect(result_tours[9][:income_tax][:income_tax_amount]).to be_within(0.01).of(10_285.9)
+      end
+
+      it "returns a nice hash made of social contribution amount equal to 0" do
+        result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "without_property_income", 10)
+        result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux, "without_property_income", 10)
+        result_nimes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_nimes, "without_property_income", 10)
+        result_lille = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lille, "without_property_income", 10)
+        result_agen = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_agen, "without_property_income", 10)
+        result_grenoble = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_grenoble, "without_property_income", 10)
+        result_toulouse = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulouse, "without_property_income", 10)
+        result_limoges = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_limoges, "without_property_income", 10)
+        result_rennes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_rennes, "without_property_income", 10)
+        result_tours = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_tours, "without_property_income", 10)
+        # Results should not change between fiscal years because it is only based on fiscal_revenues_p1 & 2
+        expect(result_lyon[0][:social_contributions_amount]).to eq(0)
+        expect(result_bordeaux[1][:social_contributions_amount]).to eq(0)
+        expect(result_nimes[2][:social_contributions_amount]).to eq(0)
+        expect(result_lille[3][:social_contributions_amount]).to eq(0)
+        expect(result_agen[4][:social_contributions_amount]).to eq(0)
+        expect(result_grenoble[5][:social_contributions_amount]).to eq(0)
+        expect(result_toulouse[6][:social_contributions_amount]).to eq(0)
+        expect(result_limoges[7][:social_contributions_amount]).to eq(0)
+        expect(result_rennes[8][:social_contributions_amount]).to eq(0)
+        expect(result_tours[9][:social_contributions_amount]).to eq(0)
       end
     end
 
@@ -335,6 +359,9 @@ RSpec.describe FrenchTaxSystem do
         expect(result_rennes[:fiscal_nb_parts]).to eq(4)
         expect(result_tours[:fiscal_nb_parts]).to eq(2)
       end
+    end
+
+    describe "#calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
     end
 
     describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
