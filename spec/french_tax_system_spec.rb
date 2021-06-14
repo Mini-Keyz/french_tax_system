@@ -450,21 +450,53 @@ RSpec.describe FrenchTaxSystem do
     end
 
     describe "#calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)" do
-      context "when it has no property income" do
+      context "for real fiscal parts" do
         it "returns the family quotient amount" do
           result_lyon = FrenchTaxSystem.calc_family_quotient_amount(90_000, 3.5)
           result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(54_000, 4)
+          result_nimes = FrenchTaxSystem.calc_family_quotient_amount(130_000, 4.5)
+          result_lille = FrenchTaxSystem.calc_family_quotient_amount(49_500, 3)
+          result_agen = FrenchTaxSystem.calc_family_quotient_amount(100_000, 4)
+          result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_500, 1)
+          result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(22_500, 2.5)
+          result_limoges = FrenchTaxSystem.calc_family_quotient_amount(180_000, 4.5)
+          result_rennes = FrenchTaxSystem.calc_family_quotient_amount(45_000, 4)
+          result_tours = FrenchTaxSystem.calc_family_quotient_amount(74_250, 2)
           expect(result_lyon).to be_within(0.01).of(25_714.28)
           expect(result_bordeaux).to be_within(0.01).of(13_500)
+          expect(result_nimes).to be_within(0.01).of(28_888.89)
+          expect(result_lille).to be_within(0.01).of(16_500)
+          expect(result_agen).to be_within(0.01).of(25_000)
+          expect(result_grenoble).to be_within(0.01).of(31_500)
+          expect(result_toulouse).to be_within(0.01).of(9_000)
+          expect(result_limoges).to be_within(0.01).of(40_000)
+          expect(result_rennes).to be_within(0.01).of(11_250)
+          expect(result_tours).to be_within(0.01).of(37_125)
         end
       end
 
-      context "when it has some random property income" do
+      context "for fiscal parts capping" do
         it "returns the family quotient amount" do
-          result_lyon = FrenchTaxSystem.calc_family_quotient_amount(110_000, 3.5)
-          result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(56_000, 4)
-          expect(result_lyon).to be_within(0.01).of(31_428.57)
-          expect(result_bordeaux).to be_within(0.01).of(14_000)
+          result_lyon = FrenchTaxSystem.calc_family_quotient_amount(90_000, 2)
+          result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(54_000, 2)
+          result_nimes = FrenchTaxSystem.calc_family_quotient_amount(130_000, 2)
+          result_lille = FrenchTaxSystem.calc_family_quotient_amount(49_500, 1)
+          result_agen = FrenchTaxSystem.calc_family_quotient_amount(100_000, 2)
+          result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_500, 1)
+          result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(22_500, 1)
+          result_limoges = FrenchTaxSystem.calc_family_quotient_amount(180_000, 2)
+          result_rennes = FrenchTaxSystem.calc_family_quotient_amount(45_000, 1)
+          result_tours = FrenchTaxSystem.calc_family_quotient_amount(74_250, 2)
+          expect(result_lyon).to be_within(0.01).of(45_000)
+          expect(result_bordeaux).to be_within(0.01).of(27_000)
+          expect(result_nimes).to be_within(0.01).of(65_000)
+          expect(result_lille).to be_within(0.01).of(49_500)
+          expect(result_agen).to be_within(0.01).of(50_000)
+          expect(result_grenoble).to be_within(0.01).of(31_500)
+          expect(result_toulouse).to be_within(0.01).of(22_500)
+          expect(result_limoges).to be_within(0.01).of(90_000)
+          expect(result_rennes).to be_within(0.01).of(45_000)
+          expect(result_tours).to be_within(0.01).of(37_125)
         end
       end
     end

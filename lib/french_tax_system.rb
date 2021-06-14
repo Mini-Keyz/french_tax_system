@@ -129,14 +129,14 @@ module FrenchTaxSystem
     fiscal_nb_parts_for_capping = simulation[:fiscal_marital_status] == "Célibataire" ? FISCAL_NB_PARTS_FOR_SINGLE_PERSON : FISCAL_NB_PARTS_FOR_MARRIED_COUPLE
 
     # Calculate the family quotient amount
-    family_quotient_amount_real_fiscal_parts = calc_family_quotient_amount(global_net_taxable_income_amount,
-                                                                           fiscal_nb_parts)
+    family_quotient_amount_for_real_fiscal_parts = calc_family_quotient_amount(global_net_taxable_income_amount,
+                                                                               fiscal_nb_parts)
     family_quotient_amount_for_fiscal_parts_capping = calc_family_quotient_amount(global_net_taxable_income_amount,
                                                                                   fiscal_nb_parts_for_capping)
 
     # Calculcate the aggregated tax amount
     current_year = Date.today.year
-    aggregated_tax_amount_real_fiscal_parts = calc_aggregated_tax_amount(family_quotient_amount_real_fiscal_parts,
+    aggregated_tax_amount_real_fiscal_parts = calc_aggregated_tax_amount(family_quotient_amount_for_real_fiscal_parts,
                                                                          current_year)
     aggregated_tax_amount_for_fiscal_parts_capping = calc_aggregated_tax_amount(
       family_quotient_amount_for_fiscal_parts_capping, current_year
@@ -183,7 +183,7 @@ module FrenchTaxSystem
   # @params [Hash] simulation a simulation created by Mini-Keyz app
   # @options simulation [Integer] :fiscal_revenues_p1 salary from person 1 of the fiscal household (euros)
   # @options simulation [Integer] :fiscal_revenues_p2 salary from person 2 of the fiscal household (euros)
-  # @params [Float] net_taxable_property_income_amount the taxable amount generated from the property income, can be positive or negative
+  # @params [Float] net_taxable_property_income_amount the taxable amount generated from the property income, can be positive or negative (euros)
   #
   # @return [Float] the global net taxable amount (euros)
   def calc_global_net_taxable_amount(simulation, net_taxable_property_income_amount)
@@ -194,8 +194,8 @@ module FrenchTaxSystem
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
   # @options simulation [String] :fiscal_marital_status fiscal relation between the 'parents' of the household
-  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
-  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household (nb)
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household (nb)
   #
   # @return [Integer] the number of fiscal parts (nb)
   def calc_fiscal_nb_parts(simulation)
@@ -222,8 +222,8 @@ module FrenchTaxSystem
   # Calculate the number of fiscal parts incurred from children
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
-  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
-  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household (nb)
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household (nb)
   #
   # @return [Integer] the number of fiscal parts incurred from children (nb)
   def calc_fiscal_nb_parts_incurred_from_children(simulation)
@@ -265,13 +265,23 @@ module FrenchTaxSystem
     end
   end
 
+  # Calculate the family quotient amount
+  #
+  # @params [Integer] global_net_taxable_income_amount the global net taxable amount (euros)
+  # @params [Integer] fiscal_nb_parts the household's number of fiscal parts (nb)
+  #
+  # @return [Integer] the family quotient amount (euros)
+  def calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)
+    global_net_taxable_income_amount / fiscal_nb_parts
+  end
+
   # Calculate the capping income tax deduction from fiscal parts
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
-  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
-  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
-  # @params [Integer] fiscal_nb_parts the household's number of fiscal parts
-  # @params [Integer] current_year the current_year of the calculation
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household (nb)
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household (nb)
+  # @params [Integer] fiscal_nb_parts the household's number of fiscal parts (nb)
+  # @params [Integer] current_year the current_year of the calculation (nb)
   #
   # @return [Integer] the capping income tax deduction from fiscal parts (euros)
   def calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
@@ -321,10 +331,6 @@ module FrenchTaxSystem
     when "LMNP"
       LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     end
-  end
-
-  def calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)
-    global_net_taxable_income_amount / fiscal_nb_parts
   end
 
   def calc_aggregated_tax_amount(family_quotient_amount, current_year)
