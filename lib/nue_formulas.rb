@@ -76,15 +76,35 @@ module FrenchTaxSystem
     # @options hash [Boolean] :negative_taxable_property_income? returns true or false if there is a negative taxable property income for this fiscal year
     # @options hash [Float] :negative_taxable_property_income_amount_to_postpone the potential negative taxable property income to postpone to the next fiscal year (euros)
     def calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
-      # Calculate net taxable property income amount depending on fiscal year
+      # Calculate deductible expenses from this fiscal year
       deductible_expenses = calc_deductible_expenses_sum(simulation, investment_fiscal_year)
-      net_taxable_property_income_amount = simulation[:house_rent_amount_per_year] - deductible_expenses
 
-      # Add postponed negative taxable property income from previous fiscal year
-      net_taxable_property_income_amount -= postponed_negative_taxable_property_income_from_previous_fiscal_year
+      # Calculate gross taxable property income amount depending on fiscal year and with postponed negative taxable property income from previous fiscal year
+      gross_taxable_property_income_amount = calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)
 
-      # Cap negativity of net taxable amount and postpone negative taxable if remaining
-      calc_taxable_property_income_repartition(simulation, net_taxable_property_income_amount)
+      if gross_taxable_property_income_amount >= 0
+        # Return a hash with corresponding values
+        {
+          net_taxable_property_income_amount: gross_taxable_property_income_amount,
+          negative_taxable_property_income?: false,
+          negative_taxable_property_income_amount_to_postpone: 0
+        }
+      elsif gross_taxable_property_income_amount.negative?
+        # Cap negativity of net taxable amount and postpone negative taxable if remaining
+        calc_taxable_property_income_repartition(simulation, gross_taxable_property_income_amount)
+      end
+    end
+
+    # Calculate the gross taxable property income amount
+    #
+    # @params [Hash] simulation a simulation created by Mini-Keyz app
+    # @options simulation [Float] :house_rent_amount_per_year the income generated per year (euros)
+    # @parans [Float] :deductible_expenses the sum of deductible expenses (euros)
+    # @params [Integer] postponed_negative_taxable_property_income_from_previous_fiscal_year the potentiel negative taxable income from the previous fiscal year
+    #
+    # @return [Float] the gross taxable property income amount
+    def calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)
+      simulation[:house_rent_amount_per_year] - deductible_expenses - postponed_negative_taxable_property_income_from_previous_fiscal_year
     end
 
     # Calculate the sum of deductible expenses for this fiscal year
@@ -118,44 +138,44 @@ module FrenchTaxSystem
     # @params [Hash] simulation a simulation created by Mini-Keyz app
     # @options simulation [Float] :house_rent_amount_per_year the income generated per year (euros)
     # @options simulation [Float] :credit_loan_cumulative_interests_paid_for_year_two how much is the credit interest cost for year 2 (euros/year)
-    # @params [Float] :net_taxable_property_income_amount the taxable income generated from the property investment to add to the global taxable income
+    # @params [Float] :gross_taxable_property_income_amount the taxable income generated from the property investment to add to the global taxable income
     #
     # @return [Hash] a hash made of the net taxable property income (euros) and other values
     # @options hash [Float] :net_taxable_property_income_amount the net taxable property income generated from the investment (euros)
     # @options hash [Boolean] :negative_taxable_property_income? returns true or false if there is a negative taxable property income for this fiscal year
     # @options hash [Float] :negative_taxable_property_income_amount_to_postpone the potential negative taxable property income to postpone to the next fiscal year (euros)
-    def calc_taxable_property_income_repartition(simulation, net_taxable_property_income_amount)
-      net_property_income_minus_loan_interet_cost = simulation[:house_rent_amount_per_year] - simulation[:credit_loan_cumulative_interests_paid_for_year_two]
+    def calc_taxable_property_income_repartition(simulation, gross_taxable_property_income_amount)
+      gross_property_income_minus_loan_interet_cost = simulation[:house_rent_amount_per_year] - simulation[:credit_loan_cumulative_interests_paid_for_year_two]
 
-      # If net_property_income_minus_loan_interet_cost is positive, we deduct all expenses from this fiscal year net_taxable_property_income_amount and report what's left to next fiscal years
-      if net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      # If gross_property_income_minus_loan_interet_cost is positive, we deduct all expenses from this fiscal year gross_taxable_property_income_amount and report what's left to next fiscal years
+      if gross_property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
-          net_taxable_property_income_amount: net_taxable_property_income_amount,
-          negative_taxable_property_income?: net_taxable_property_income_amount.negative?,
+          net_taxable_property_income_amount: gross_taxable_property_income_amount,
+          negative_taxable_property_income?: gross_taxable_property_income_amount.negative?,
           negative_taxable_property_income_amount_to_postpone: 0
         }
-      elsif net_property_income_minus_loan_interet_cost.positive? && net_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif gross_property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT,
           negative_taxable_property_income?: true,
-          negative_taxable_property_income_amount_to_postpone: (net_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
+          negative_taxable_property_income_amount_to_postpone: (gross_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
         }
-      # If net_property_income_minus_loan_interet_cost is negative, we deduct all expenses EXCEPT credit interest costs from this fiscal year net_taxable_property_income_amount and report what's left + credit interest cost to next fiscal years
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      # If gross_property_income_minus_loan_interet_cost is negative, we deduct all expenses EXCEPT credit interest costs from this fiscal year gross_taxable_property_income_amount and report what's left + credit interest cost to next fiscal years
+      elsif gross_property_income_minus_loan_interet_cost.negative? && gross_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
-          net_taxable_property_income_amount: net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two],
+          net_taxable_property_income_amount: gross_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two],
           negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: simulation[:credit_loan_cumulative_interests_paid_for_year_two]
         }
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount.abs - simulation[:credit_loan_cumulative_interests_paid_for_year_two]) > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif gross_property_income_minus_loan_interet_cost.negative? && gross_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (gross_taxable_property_income_amount.abs - simulation[:credit_loan_cumulative_interests_paid_for_year_two]) > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: - CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT,
           negative_taxable_property_income?: true,
-          negative_taxable_property_income_amount_to_postpone: (net_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
+          negative_taxable_property_income_amount_to_postpone: (gross_taxable_property_income_amount + CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT).abs
         }
-      elsif net_property_income_minus_loan_interet_cost.negative? && net_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (net_taxable_property_income_amount.abs - simulation[:credit_loan_cumulative_interests_paid_for_year_two]) <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
+      elsif gross_property_income_minus_loan_interet_cost.negative? && gross_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT && (gross_taxable_property_income_amount.abs - simulation[:credit_loan_cumulative_interests_paid_for_year_two]) <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
-          net_taxable_property_income_amount: net_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two],
+          net_taxable_property_income_amount: gross_taxable_property_income_amount + simulation[:credit_loan_cumulative_interests_paid_for_year_two],
           negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: simulation[:credit_loan_cumulative_interests_paid_for_year_two]
         }

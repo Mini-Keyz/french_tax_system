@@ -266,6 +266,31 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
       end
     end
 
+    describe "#calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)" do
+      it "returns the gross taxable property income amount for year 1" do
+        result_lyon = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lyon, 55_607.91, 0)
+        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_bordeaux, 8_815.08, 0)
+        result_nimes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_nimes, 156_921.46, 0)
+        result_lille = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lille, 4_564.66, 0)
+        result_agen = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_agen, 10_313.92, 0)
+        result_grenoble = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_grenoble, 13_372.40, 0)
+        result_toulouse = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_toulouse, 2_037.72, 0)
+        result_limoges = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_limoges, 39_129.20, 0)
+        result_rennes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_rennes, 58_546.17, 0)
+        result_tours = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_tours, 34_073.44, 0)
+        expect(result_lyon).to be_within(0.01).of(-32_407.91)
+        expect(result_bordeaux).to be_within(0.01).of(-739.08)
+        expect(result_nimes).to be_within(0.01).of(-82_121.46)
+        expect(result_lille).to be_within(0.01).of(2_705.34)
+        expect(result_agen).to be_within(0.01).of(18_630.08)
+        expect(result_grenoble).to be_within(0.01).of(387.60)
+        expect(result_toulouse).to be_within(0.01).of(3_470.28)
+        expect(result_limoges).to be_within(0.01).of(-6_969.20)
+        expect(result_rennes).to be_within(0.01).of(-32_486.17)
+        expect(result_tours).to be_within(0.01).of(-9_529.44)
+      end
+    end
+
     # describe "#calc_taxable_property_income_repartition(simulation, net_taxable_property_income_amount)" do
     #   context "when net_taxable_property_income_amount is negative" do
     #     context "when net_property_income_minus_loan_interet_cost is positive AND net_taxable_property_income_amount is less than CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT" do
