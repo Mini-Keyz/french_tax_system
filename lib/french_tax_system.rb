@@ -22,6 +22,8 @@ module FrenchTaxSystem
 
   FISCAL_NB_PARTS_FOR_MARRIED_COUPLE = 2
   FISCAL_NB_PARTS_FOR_SINGLE_PERSON = 1
+  FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN = 0.5
+  FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN = 0.25
 
   FAMILY_QUOTIENT_CAPPING_AMOUNT = {
     ## Per half fiscal parts for children
@@ -176,6 +178,88 @@ module FrenchTaxSystem
     end
   end
 
+  # Calculate the global net taxable amount with or without the generated income from the property investment
+  #
+  # @params [Hash] simulation a simulation created by Mini-Keyz app
+  # @options simulation [Integer] :fiscal_revenues_p1 salary from person 1 of the fiscal household (euros)
+  # @options simulation [Integer] :fiscal_revenues_p2 salary from person 2 of the fiscal household (euros)
+  # @params [Float] net_taxable_property_income_amount the taxable amount generated from the property income, can be positive or negative
+  #
+  # @return [Float] the global net taxable amount (euros)
+  def calc_global_net_taxable_amount(simulation, net_taxable_property_income_amount)
+    ((simulation[:fiscal_revenues_p1] + (simulation.key?(:fiscal_revenues_p2) ? simulation[:fiscal_revenues_p2] : 0)) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
+  end
+
+  # Calculate the household's number of fiscal parts
+  #
+  # @params [Hash] simulation a simulation created by Mini-Keyz app
+  # @options simulation [String] :fiscal_marital_status fiscal relation between the 'parents' of the household
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
+  #
+  # @return [Integer] the number of fiscal parts (nb)
+  def calc_fiscal_nb_parts(simulation)
+    case simulation[:fiscal_marital_status]
+    when "Marié / Pacsé"
+      FISCAL_NB_PARTS_FOR_MARRIED_COUPLE + calc_fiscal_nb_parts_incurred_from_children(simulation)
+    when "Célibataire"
+      # We make the assumption that when 'Celibataire' the parent lives alone, so the fiscal part incurred from the first children (ie the biggest one in term of fiscal part) is double
+      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON
+      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] >= 1
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 0
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN + calc_fiscal_nb_parts_incurred_from_children(simulation)
+      end
+    end
+  end
+
+  # Calculate the number of fiscal parts incurred from children
+  #
+  # @params [Hash] simulation a simulation created by Mini-Keyz app
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
+  #
+  # @return [Integer] the number of fiscal parts incurred from children (nb)
+  def calc_fiscal_nb_parts_incurred_from_children(simulation)
+    total_nb_children = simulation[:fiscal_nb_dependent_children] + simulation[:fiscal_nb_alternate_custody_children]
+
+    if total_nb_children <= 2
+      FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN * simulation[:fiscal_nb_dependent_children] + FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * simulation[:fiscal_nb_alternate_custody_children]
+
+    elsif total_nb_children >= 3
+      # Above 3 children, fiscal nb parts for added children get multiplied by 2
+      if simulation[:fiscal_nb_dependent_children] == 0
+        first_two_children = 2 * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN
+        next_children = (simulation[:fiscal_nb_alternate_custody_children] - 2) * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * 2
+        first_two_children + next_children
+
+      elsif simulation[:fiscal_nb_dependent_children] == 1
+        if simulation[:fiscal_nb_alternate_custody_children] == 2
+          first_two_children = FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN + FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN
+          next_children = FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * 2
+          first_two_children + next_children
+
+        elsif simulation[:fiscal_nb_alternate_custody_children] >= 3
+          first_two_children = FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN + FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN
+          next_children = (simulation[:fiscal_nb_alternate_custody_children] - 1) * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * 2
+          first_two_children + next_children
+        end
+
+      elsif simulation[:fiscal_nb_dependent_children] == 2
+        first_two_children = 2 * FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN
+        next_children = simulation[:fiscal_nb_alternate_custody_children] * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * 2
+        first_two_children + next_children
+
+      elsif simulation[:fiscal_nb_dependent_children] >= 3
+        first_two_children = 2 * FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN
+        next_children = (simulation[:fiscal_nb_dependent_children] - 2) * FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN * 2 + simulation[:fiscal_nb_alternate_custody_children] * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN * 2
+        first_two_children + next_children
+
+      end
+    end
+  end
+
   def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
     if simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
       discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_single_person_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
@@ -212,55 +296,6 @@ module FrenchTaxSystem
       NueFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     when "LMNP"
       LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
-    end
-  end
-
-  def calc_global_net_taxable_amount(simulation, net_taxable_property_income_amount)
-    ((simulation[:fiscal_revenues_p1] + (simulation.key?(:fiscal_revenues_p2) ? simulation[:fiscal_revenues_p2] : 0)) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
-  end
-
-  def calc_fiscal_nb_parts(simulation)
-    case simulation[:fiscal_marital_status]
-    when "Marié / Pacsé"
-      FISCAL_NB_PARTS_FOR_MARRIED_COUPLE + calc_fiscal_nb_parts_incurred_from_children(simulation)
-    when "Célibataire"
-      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
-        FISCAL_NB_PARTS_FOR_SINGLE_PERSON
-      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 2
-        # +0.5 part for "parent isole" 1) with at least one dependent child OR 2) with at least two alternate custody child
-        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.5 + calc_fiscal_nb_parts_incurred_from_children(simulation)
-      elsif simulation[:fiscal_nb_alternate_custody_children] == 1 && simulation[:fiscal_nb_dependent_children] == 0
-        # +0.25 part for "parent isole" with one alternate custody child but no dependent child
-        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 0.25 + calc_fiscal_nb_parts_incurred_from_children(simulation)
-      end
-    end
-  end
-
-  def calc_fiscal_nb_parts_incurred_from_children(simulation)
-    # Detail of calculation method in GitHub wiki: https://github.com/Mth0158/mini-keyz/wiki/French-tax-system
-    total_nb_children = simulation[:fiscal_nb_dependent_children] + simulation[:fiscal_nb_alternate_custody_children]
-
-    if total_nb_children <= 2
-      0.5 * simulation[:fiscal_nb_dependent_children] + 0.25 * simulation[:fiscal_nb_alternate_custody_children]
-
-    elsif total_nb_children >= 3
-
-      if simulation[:fiscal_nb_dependent_children] == 0
-        0.5 + (simulation[:fiscal_nb_alternate_custody_children] - 2) * 0.5
-
-      elsif simulation[:fiscal_nb_dependent_children] == 1
-        if simulation[:fiscal_nb_alternate_custody_children] == 2
-          1.25
-        elsif simulation[:fiscal_nb_alternate_custody_children] >= 3
-          1.25 + (simulation[:fiscal_nb_alternate_custody_children] - 2) * 0.5
-        end
-
-      elsif simulation[:fiscal_nb_dependent_children] == 2
-        1 + simulation[:fiscal_nb_alternate_custody_children] * 0.5
-
-      elsif simulation[:fiscal_nb_dependent_children] >= 3
-        1 + (simulation[:fiscal_nb_dependent_children] - 2) + simulation[:fiscal_nb_alternate_custody_children] * 0.5
-      end
     end
   end
 

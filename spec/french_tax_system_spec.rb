@@ -47,10 +47,57 @@ RSpec.describe FrenchTaxSystem do
 
     let(:simulation_agen) do
       {
-        fiscal_revenues_p1: 61_111,
+        fiscal_revenues_p1: 61_111.11,
         fiscal_revenues_p2: 50_000,
         fiscal_marital_status: "Marié / Pacsé",
         fiscal_nb_dependent_children: 3,
+        fiscal_nb_alternate_custody_children: 0
+      }
+    end
+
+    let(:simulation_grenoble) do
+      {
+        fiscal_revenues_p1: 35_000,
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 0,
+        fiscal_nb_alternate_custody_children: 0
+      }
+    end
+
+    let(:simulation_toulouse) do
+      {
+        fiscal_revenues_p1: 25_000,
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 2,
+        fiscal_nb_alternate_custody_children: 0
+      }
+    end
+
+    let(:simulation_limoges) do
+      {
+        fiscal_revenues_p1: 80_000,
+        fiscal_revenues_p2: 120_000,
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 3,
+        fiscal_nb_alternate_custody_children: 1
+      }
+    end
+
+    let(:simulation_rennes) do
+      {
+        fiscal_revenues_p1: 50_000,
+        fiscal_marital_status: "Célibataire",
+        fiscal_nb_dependent_children: 2,
+        fiscal_nb_alternate_custody_children: 3
+      }
+    end
+
+    let(:simulation_tours) do
+      {
+        fiscal_revenues_p1: 45_000,
+        fiscal_revenues_p2: 37_500,
+        fiscal_marital_status: "Marié / Pacsé",
+        fiscal_nb_dependent_children: 0,
         fiscal_nb_alternate_custody_children: 0
       }
     end
@@ -72,6 +119,20 @@ RSpec.describe FrenchTaxSystem do
     end
 
     describe "#calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+      it "returns a nice hash" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 2)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux,
+                                                                          "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 2)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 2)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 2)
+        expect(result_lyon).to be_a(Hash)
+        expect(result_bordeaux).to be_a(Hash)
+        expect(result_nimes).to be_a(Hash)
+        expect(result_lille).to be_a(Hash)
+        expect(result_agen).to be_a(Hash)
+      end
+
       it "returns the income tax per year" do
         result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 2)
         result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux,
@@ -88,22 +149,27 @@ RSpec.describe FrenchTaxSystem do
     end
 
     describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
-      context "when it has no property income" do
-        it "returns the net taxable amount" do
-          result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, 0)
-          result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, 0)
-          expect(result_lyon).to be_within(0.01).of(90_000)
-          expect(result_bordeaux).to be_within(0.01).of(54_000)
-        end
-      end
-
-      context "when it has some random property income" do
-        it "returns the net taxable amount" do
-          result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, 20_000)
-          result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, 2_000)
-          expect(result_lyon).to be_within(0.01).of(110_000)
-          expect(result_bordeaux).to be_within(0.01).of(56_000)
-        end
+      it "returns the net taxable amount" do
+        result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, 0)
+        result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, 0)
+        result_nimes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_nimes, 0)
+        result_lille = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lille, 0)
+        result_agen = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_agen, 0)
+        result_grenoble = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_grenoble, 0)
+        result_toulouse = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulouse, 0)
+        result_limoges = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_limoges, 0)
+        result_rennes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_rennes, 0)
+        result_tours = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_tours, 0)
+        expect(result_lyon).to be_within(0.01).of(90_000)
+        expect(result_bordeaux).to be_within(0.01).of(54_000)
+        expect(result_nimes).to be_within(0.01).of(130_500)
+        expect(result_lille).to be_within(0.01).of(49_500)
+        expect(result_agen).to be_within(0.01).of(100_000)
+        expect(result_grenoble).to be_within(0.01).of(31_500)
+        expect(result_toulouse).to be_within(0.01).of(22_500)
+        expect(result_limoges).to be_within(0.01).of(180_000)
+        expect(result_rennes).to be_within(0.01).of(45_000)
+        expect(result_tours).to be_within(0.01).of(74_250)
       end
     end
 
@@ -188,38 +254,69 @@ RSpec.describe FrenchTaxSystem do
         }
       end
 
+      let(:simulation_fiscal_parts_eleven) do
+        {
+          fiscal_marital_status: "Marié / Pacsé",
+          fiscal_nb_dependent_children: 1,
+          fiscal_nb_alternate_custody_children: 2
+        }
+      end
+
+      let(:simulation_fiscal_parts_twelve) do
+        {
+          fiscal_marital_status: "Marié / Pacsé",
+          fiscal_nb_dependent_children: 1,
+          fiscal_nb_alternate_custody_children: 4
+        }
+      end
+
       describe "#calc_fiscal_nb_parts(simulation)" do
         it "returns household's fiscal parts number" do
           result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lyon)
           result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_bordeaux)
           result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_nimes)
           result_lille = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_lille)
+          result_agen = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_agen)
+          result_grenoble = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_grenoble)
+          result_toulouse = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_toulouse)
+          result_limoges = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_limoges)
+          result_rennes = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_rennes)
+          result_tours = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_tours)
           expect(result_lyon).to eq(3.5)
           expect(result_bordeaux).to eq(4)
           expect(result_nimes).to eq(4.5)
           expect(result_lille).to eq(3)
+          expect(result_agen).to eq(3)
+          expect(result_grenoble).to eq(3)
+          expect(result_toulouse).to eq(3)
+          expect(result_limoges).to eq(3)
+          expect(result_rennes).to eq(3)
+          expect(result_tours).to eq(3)
 
           result_simulation_one = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_one)
           result_simulation_two = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_two)
           result_simulation_three = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_three)
           result_simulation_four = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_four)
           result_simulation_five = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_five)
-          expect(result_simulation_one).to eq(3)
-          expect(result_simulation_two).to eq(2)
-          expect(result_simulation_three).to eq(1.5)
-          expect(result_simulation_four).to eq(8.5)
-          expect(result_simulation_five).to eq(2.25)
-
           result_simulation_six = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_six)
           result_simulation_seven = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_seven)
           result_simulation_eight = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_eight)
           result_simulation_nine = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_nine)
           result_simulation_ten = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_ten)
+          result_simulation_eleven = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_eleven)
+          result_simulation_twelve = FrenchTaxSystem.calc_fiscal_nb_parts(simulation_fiscal_parts_twelve)
+          expect(result_simulation_one).to eq(3)
+          expect(result_simulation_two).to eq(2)
+          expect(result_simulation_three).to eq(1.5)
+          expect(result_simulation_four).to eq(8.5)
+          expect(result_simulation_five).to eq(2.25)
           expect(result_simulation_six).to eq(3.5)
           expect(result_simulation_seven).to eq(2.5)
           expect(result_simulation_eight).to eq(2.25)
           expect(result_simulation_nine).to eq(9)
           expect(result_simulation_ten).to eq(2.75)
+          expect(result_simulation_eleven).to eq(3.25)
+          expect(result_simulation_twelve).to eq(4.25)
         end
       end
 
@@ -229,10 +326,47 @@ RSpec.describe FrenchTaxSystem do
           result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_bordeaux)
           result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_nimes)
           result_lille = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lille)
+          result_agen = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_agen)
+          result_grenoble = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_grenoble)
+          result_toulouse = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_toulouse)
+          result_limoges = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_limoges)
+          result_rennes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_rennes)
+          result_tours = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_tours)
           expect(result_lyon).to eq(1.5)
           expect(result_bordeaux).to eq(2)
           expect(result_nimes).to eq(2.5)
           expect(result_lille).to eq(1.5)
+          expect(result_agen).to eq(2)
+          expect(result_grenoble).to eq(0)
+          expect(result_toulouse).to eq(1)
+          expect(result_limoges).to eq(2.5)
+          expect(result_rennes).to eq(2.5)
+          expect(result_tours).to eq(0)
+
+          result_simulation_one = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_one)
+          result_simulation_two = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_two)
+          result_simulation_three = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_three)
+          result_simulation_four = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_four)
+          result_simulation_five = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_five)
+          result_simulation_six = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_six)
+          result_simulation_seven = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_seven)
+          result_simulation_eight = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_eight)
+          result_simulation_nine = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_nine)
+          result_simulation_ten = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_ten)
+          result_simulation_eleven = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_eleven)
+          result_simulation_twelve = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_fiscal_parts_twelve)
+          expect(result_simulation_one).to eq(1.5)
+          expect(result_simulation_two).to eq(0.5)
+          expect(result_simulation_three).to eq(0.25)
+          expect(result_simulation_four).to eq(7)
+          expect(result_simulation_five).to eq(0.75)
+          expect(result_simulation_six).to eq(1.5)
+          expect(result_simulation_seven).to eq(0.5)
+          expect(result_simulation_eight).to eq(0.25)
+          expect(result_simulation_nine).to eq(7)
+          expect(result_simulation_ten).to eq(0.75)
+          expect(result_simulation_eleven).to eq(1.25)
+          expect(result_simulation_twelve).to eq(2.25)
         end
       end
 
