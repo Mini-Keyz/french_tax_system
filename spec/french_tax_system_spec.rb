@@ -267,7 +267,7 @@ RSpec.describe FrenchTaxSystem do
         expect(result_tours[:negative_taxable_property_income?]).to eq(false)
       end
 
-      it "returns the negative taxable property income to the next fiscal year" do
+      it "returns the negative taxable property income amount postponed to the next fiscal year" do
         result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
         result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
         result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
@@ -288,6 +288,52 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_rennes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+      end
+
+      it "returns the discount amount on income tax for low income household" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_bordeaux[:discount_on_low_income_tax_amount]).to be_within(0.01).of(609.07)
+        expect(result_nimes[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_lille[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_agen[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_grenoble[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_toulouse[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_limoges[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_rennes[:discount_on_low_income_tax_amount]).to be_within(0.01).of(512.6)
+        expect(result_tours[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+      end
+
+      it "returns household's fiscal parts number" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:fiscal_nb_parts]).to eq(3.5)
+        expect(result_bordeaux[:fiscal_nb_parts]).to eq(4)
+        expect(result_nimes[:fiscal_nb_parts]).to eq(4.5)
+        expect(result_lille[:fiscal_nb_parts]).to eq(3)
+        expect(result_agen[:fiscal_nb_parts]).to eq(4)
+        expect(result_grenoble[:fiscal_nb_parts]).to eq(1)
+        expect(result_toulouse[:fiscal_nb_parts]).to eq(2.5)
+        expect(result_limoges[:fiscal_nb_parts]).to eq(4.5)
+        expect(result_rennes[:fiscal_nb_parts]).to eq(4)
+        expect(result_tours[:fiscal_nb_parts]).to eq(2)
       end
     end
 
