@@ -555,31 +555,57 @@ RSpec.describe FrenchTaxSystem do
       end
     end
 
-    describe "#apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)" do
-      it "returns final tax income with the reduced income tax for low incomes" do
-        result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lyon)
-        result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_bordeaux)
-        result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_nimes)
-        result_lille = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lille)
-        result_agen = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_agen)
-        result_grenoble = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_grenoble)
-        result_toulouse = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_toulouse)
-        result_limoges = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_limoges)
-        result_rennes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_rennes)
-        result_tours = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_tours)
-        expect(result_lyon).to eq(1.5)
-        expect(result_bordeaux).to eq(2)
-        expect(result_nimes).to eq(2.5)
-        expect(result_lille).to eq(1.5)
-        expect(result_agen).to eq(2)
-        expect(result_grenoble).to eq(0)
-        expect(result_toulouse).to eq(1)
-        expect(result_limoges).to eq(2.5)
-        expect(result_rennes).to eq(2.5)
-        expect(result_tours).to eq(0)
+    describe "#apply_fiscal_parts_capping(aggregated_tax_amount_for_real_fiscal_parts, fiscal_nb_parts, aggregated_tax_amount_for_fiscal_parts_capping, fiscal_nb_parts_for_capping, capping_due_to_fiscal_parts)" do
+      it "returns previsional income tax with fiscal part capping effect" do
+        result_lyon = FrenchTaxSystem.apply_fiscal_parts_capping(1_719.73, 3.5, 7_505.45, 2, 4_710)
+        result_bordeaux = FrenchTaxSystem.apply_fiscal_parts_capping(375.65, 4, 2_105.65, 2, 6_280)
+        result_nimes = FrenchTaxSystem.apply_fiscal_parts_capping(2_672.12, 4.5, 13_505.45, 2, 7_850)
+        result_lille = FrenchTaxSystem.apply_fiscal_parts_capping(705.65, 3, 8_855.45, 1, 6_844)
+        result_agen = FrenchTaxSystem.apply_fiscal_parts_capping(1_640.65, 4, 9_005.45, 2, 6_280)
+        result_grenoble = FrenchTaxSystem.apply_fiscal_parts_capping(3_455.45, 1, 3_455.45, 1, 0)
+        result_toulouse = FrenchTaxSystem.apply_fiscal_parts_capping(0, 2.5, 1_365.65, 1, 5_274)
+        result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(6_005.45, 4.5, 22_818.28, 2, 7_850)
+        result_rennes = FrenchTaxSystem.apply_fiscal_parts_capping(128.15, 4, 7_505.45, 1, 9_984)
+        result_tours = FrenchTaxSystem.apply_fiscal_parts_capping(5_142.95, 2, 5_142.95, 2, 0)
+        expect(result_lyon).to be_within(0.01).of(10_300.9)
+        expect(result_bordeaux).to be_within(0.01).of(1_502.6)
+        expect(result_nimes).to be_within(0.01).of(19_160.9)
+        expect(result_lille).to be_within(0.01).of(2_116.95)
+        expect(result_agen).to be_within(0.01).of(11_730.9)
+        expect(result_grenoble).to be_within(0.01).of(3_455.45)
+        expect(result_toulouse).to be_within(0.01).of(0)
+        expect(result_limoges).to be_within(0.01).of(37_786.56)
+        expect(result_rennes).to be_within(0.01).of(512.6)
+        expect(result_tours).to be_within(0.01).of(10_285.9)
       end
     end
-    
+
+    describe "#apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)" do
+      it "returns final tax income with the reduced income tax for low incomes" do
+        current_year = Date.today.year
+
+        result_lyon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lyon, 10_300.9, current_year)
+        result_bordeaux = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_bordeaux, 1_502.6, current_year)
+        result_nimes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_nimes, 19_160.9, current_year)
+        result_lille = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lille, 2_116.95, current_year)
+        result_agen = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_agen, 11_730.9, current_year)
+        result_grenoble = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_grenoble, 3_455.45, current_year)
+        result_toulouse = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulouse, 0, current_year)
+        result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 37_786.56, current_year)
+        result_rennes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_rennes, 512.6, current_year)
+        result_tours = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_tours, 10_285.9, current_year)
+        expect(result_lyon).to be_within(0.01).of(10_300.9)
+        expect(result_bordeaux).to be_within(0.01).of(893.53) # Married couple household effect
+        expect(result_nimes).to be_within(0.01).of(19_160.9)
+        expect(result_lille).to be_within(0.01).of(2_116.95)
+        expect(result_agen).to be_within(0.01).of(11_730.9)
+        expect(result_grenoble).to be_within(0.01).of(3_455.45)
+        expect(result_toulouse).to be_within(0.01).of(0)
+        expect(result_limoges).to be_within(0.01).of(37_786.56)
+        expect(result_rennes).to be_within(0.01).of(0) # Single person household effect
+        expect(result_tours).to be_within(0.01).of(10_285.9)
+      end
+    end
 
     describe "#calc_income_taxes_scale(simulation, calculation_method)" do
       it "returns the corresponding income tax scale on which revenues are taxed" do

@@ -136,20 +136,13 @@ module FrenchTaxSystem
 
     # Calculcate the aggregated tax amount
     current_year = Date.today.year
-    aggregated_tax_amount_real_fiscal_parts = calc_aggregated_tax_amount(family_quotient_amount_for_real_fiscal_parts,
-                                                                         current_year)
-    aggregated_tax_amount_for_fiscal_parts_capping = calc_aggregated_tax_amount(
-      family_quotient_amount_for_fiscal_parts_capping, current_year
-    )
+    aggregated_tax_amount_for_real_fiscal_parts = calc_aggregated_tax_amount(family_quotient_amount_for_real_fiscal_parts, current_year)
+    aggregated_tax_amount_for_fiscal_parts_capping = calc_aggregated_tax_amount(family_quotient_amount_for_fiscal_parts_capping, current_year)
 
-    # Calculcate previsional income tax
-    capping_due_to_fiscal_parts = calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts,
-                                                                   current_year)
-    not_capped_income_tax = aggregated_tax_amount_real_fiscal_parts * fiscal_nb_parts
-    capped_income_tax = (aggregated_tax_amount_for_fiscal_parts_capping * fiscal_nb_parts_for_capping) - capping_due_to_fiscal_parts
+    # Apply fiscal part capping if necessary
+    capping_due_to_fiscal_parts = calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
 
-    # Get the highest possible income tax amount
-    almost_final_income_tax = [not_capped_income_tax, capped_income_tax].max
+    almost_final_income_tax = apply_fiscal_parts_capping(aggregated_tax_amount_for_real_fiscal_parts, fiscal_nb_parts, aggregated_tax_amount_for_fiscal_parts_capping, fiscal_nb_parts_for_capping, capping_due_to_fiscal_parts)
 
     # Apply discount on low income tax if necessary
     final_income_tax = apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
@@ -332,6 +325,22 @@ module FrenchTaxSystem
     end.sum
   end
 
+  # Apply fiscal part capping
+  #
+  # @params [Float] aggregated_tax_amount_for_real_fiscal_parts the aggregated tax amount from the fiscal parts with children (euros)
+  # @params [Integer] fiscal_nb_parts the household's number of fiscal parts (nb)
+  # @params [Float] aggregated_tax_amount_for_fiscal_parts_capping the aggregated tax amount from the fiscal parts of the parent(s) (euros)
+  # @params [Integer] fiscal_nb_parts_for_capping the parent(s) number of fiscal parts (nb)
+  # @params [Float] capping_due_to_fiscal_parts the capping to income tax deduction from fiscal parts to apply (euros)
+  #
+  # @return [Float] the previsional income tax with fiscal part capping effect if necessary (euros)
+  def apply_fiscal_parts_capping(aggregated_tax_amount_for_real_fiscal_parts, fiscal_nb_parts, aggregated_tax_amount_for_fiscal_parts_capping, fiscal_nb_parts_for_capping, capping_due_to_fiscal_parts)
+    not_capped_income_tax = aggregated_tax_amount_for_real_fiscal_parts * fiscal_nb_parts
+    capped_income_tax = (aggregated_tax_amount_for_fiscal_parts_capping * fiscal_nb_parts_for_capping) - capping_due_to_fiscal_parts
+
+    [not_capped_income_tax, capped_income_tax].max
+  end
+
   # Apply on final tax amount the discount for low incomes
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
@@ -341,13 +350,13 @@ module FrenchTaxSystem
   #
   # @return [Integer] the final tax income with the reduced income tax for low incomes (euros)
   def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
-    if simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
+    if almost_final_income_tax.positive? && simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
       discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_single_person_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
-      almost_final_income_tax - discount_to_apply
+      (almost_final_income_tax - discount_to_apply).negative? ? 0 : almost_final_income_tax - discount_to_apply
 
-    elsif simulation[:fiscal_marital_status] == "Marié / Pacsé" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_married_couple_household]
+    elsif almost_final_income_tax.positive? && simulation[:fiscal_marital_status] == "Marié / Pacsé" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_married_couple_household]
       discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_married_couple_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
-      almost_final_income_tax - discount_to_apply
+      (almost_final_income_tax - discount_to_apply).negative? ? 0 : almost_final_income_tax - discount_to_apply
 
     else
       almost_final_income_tax
