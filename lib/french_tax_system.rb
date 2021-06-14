@@ -86,7 +86,7 @@ module FrenchTaxSystem
   #
   # @return [Hash] a hash made of the final income tax to pay (euros) and other values for the fiscal year inputed
   # @options hash [Float] :income_tax_amount the income tax amount to pay for this fiscal year (euros)
-  # @options hash [Integer] :global_net_taxable_income_amount the base net taxable income from the household (euros)
+  # @options hash [Float] :global_net_taxable_income_amount the net taxable income from the household (euros)
   # @options hash [Float] :net_taxable_property_income_amount the net taxable property income generated from the investment (euros)
   # @options hash [Boolean] :negative_taxable_property_income? returns true or false if there is a negative taxable property income for this fiscal year
   # @options hash [Float] :negative_taxable_property_income_amount_to_postpone the potential negative taxable property income to postpone to the next fiscal year (euros)
@@ -143,7 +143,8 @@ module FrenchTaxSystem
   #
   # @return [Hash] a hash made of the final income tax to pay (euros) and other values for the fiscal year inputed
   # @options hash [Float] :income_tax_amount the income tax amount to pay for this fiscal year (euros)
-  # @options hash [Integer] :global_net_taxable_income_amount the base net taxable income from the household (euros)
+  # @options hash [Float] :average_tax_rate the average tax rate (percentage)
+  # @options hash [Float] :global_net_taxable_income_amount the net taxable income from the household (euros)
   # @options hash [Float] :net_taxable_property_income_amount the net taxable property income generated from the investment (euros)
   # @options hash [Boolean] :negative_taxable_property_income? returns true or false if there is a negative taxable property income for this fiscal year
   # @options hash [Float] :negative_taxable_property_income_amount_to_postpone the potential negative taxable property income to postpone to the next fiscal year (euros)
@@ -191,13 +192,14 @@ module FrenchTaxSystem
 
     # Return a hash of values
     {
+      income_tax_amount: final_income_tax,
+      average_tax_rate: final_income_tax / global_net_taxable_income_amount,
       global_net_taxable_income_amount: global_net_taxable_income_amount,
       net_taxable_property_income_amount: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:net_taxable_property_income_amount] : 0,
       negative_taxable_property_income?: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:negative_taxable_property_income?] : false,
       negative_taxable_property_income_amount_to_postpone: calculation_method == "with_property_income" ? net_taxable_property_income_amount[:negative_taxable_property_income_amount_to_postpone] : 0,
-      fiscal_nb_parts: fiscal_nb_parts,
-      income_tax_amount: final_income_tax,
-      discount_on_low_income_tax_amount: (almost_final_income_tax - final_income_tax).positive? ? almost_final_income_tax - final_income_tax : 0
+      discount_on_low_income_tax_amount: (almost_final_income_tax - final_income_tax).positive? ? almost_final_income_tax - final_income_tax : 0,
+      fiscal_nb_parts: fiscal_nb_parts
     }
   end
 
@@ -302,7 +304,7 @@ module FrenchTaxSystem
 
   # Calculate the family quotient amount
   #
-  # @params [Integer] global_net_taxable_income_amount the global net taxable amount (euros)
+  # @params [Float] :global_net_taxable_income_amount the net taxable income from the household (euros)
   # @params [Integer] fiscal_nb_parts the household's number of fiscal parts (nb)
   #
   # @return [Integer] the family quotient amount (euros)
@@ -387,7 +389,7 @@ module FrenchTaxSystem
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
   # @options simulation [String] :fiscal_marital_status fiscal relation between the 'parents' of the household
-  # @params [Integer] almost_final_income_tax the highest amount between the aggregated tax amounts from capped and not capped fiscal parts (euros)
+  # @params [Float] almost_final_income_tax the highest amount between the aggregated tax amounts from capped and not capped fiscal parts (euros)
   # @params [Integer] current_year the current_year of the calculation (nb)
   #
   # @return [Integer] the final tax income with the reduced income tax for low incomes (euros)
@@ -412,27 +414,5 @@ module FrenchTaxSystem
     when "LMNP"
       LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     end
-  end
-
-  def calc_income_taxes_scale(simulation, calculation_method, investment_fiscal_year)
-    case calculation_method
-    when "with_property_income"
-      net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, investment_fiscal_year)
-      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation,
-                                                                        net_taxable_property_income_amount)
-    when "without_property_income"
-      global_net_taxable_income_amount = calc_global_net_taxable_amount(simulation, 0)
-    else
-      raise ArgumentError, "Not a valid argument, it should be 'with_property_income' or 'without_property_income'"
-    end
-
-    fiscal_nb_parts = calc_fiscal_nb_parts(simulation)
-
-    family_quotient_amount = calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)
-    current_year = Date.today.year
-
-    income_taxes_scale = INCOME_TAXES_SCALE["year#{current_year}".to_sym]
-
-    income_taxes_scale.find { |scale| family_quotient_amount <= scale[:family_quotient_amount][:end_scale] }
   end
 end

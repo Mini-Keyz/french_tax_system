@@ -358,15 +358,6 @@ RSpec.describe FrenchTaxSystem do
         expect(result_tours).to be_within(0.01).of(10_285.9)
       end
     end
-
-    describe "#calc_income_taxes_scale(simulation, calculation_method)" do
-      it "returns the corresponding income tax scale on which revenues are taxed" do
-        result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "without_property_income", 2)
-        result_bordeaux = FrenchTaxSystem.calc_income_taxes_scale(simulation_bordeaux, "without_property_income", 2)
-        expect(result_lyon).to eq({ family_quotient_amount: { start_scale: 25_711, end_scale: 73_516 }, tax: 0.3 })
-        expect(result_bordeaux).to eq({ family_quotient_amount: { start_scale: 10_085, end_scale: 25_710 }, tax: 0.11 })
-      end
-    end
   end
 
   describe "Independent from property income" do
