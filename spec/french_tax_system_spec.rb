@@ -361,9 +361,6 @@ RSpec.describe FrenchTaxSystem do
       end
     end
 
-    describe "#calc_social_contributions_amount_for_year(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-    end
-
     describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
       it "returns the net taxable amount" do
         result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, 0)
