@@ -91,15 +91,18 @@ module FrenchTaxSystem
   # Calculate the income tax to pay with or without the generated income from the property investment
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
+  # @options simulation [Integer] :house_rent_amount_per_year how much is the rent paid by the tenant (euros/year)
   # @options simulation [Integer] :house_price_bought_amount how much was the house bought (euros)
   # @options simulation [Integer] :house_first_works_amount how much were the first works realized (euros)
   # @options simulation [Integer] :house_landlord_charges_amount_per_year how much are the landlord charges (euros/year)
-  # @options simulation [Integer] :house_property_tax_amount_per_year how much is the property tax (euros/year)
-  # @options simulation [Integer] :house_rent_amount_per_month how much is the rent paid by the tenant (euros/month)
-  # @options simulation [Integer] :house_rent_amount_per_year how much is the rent paid by the tenant (euros/year)
   # @options simulation [Integer] :house_property_management_amount_per_year how much is property management cost (euros/year)
+  # @options simulation [Integer] :house_property_tax_amount_per_year how much is the property tax (euros/year)
+  # @options simulation [Integer] :house_insurance_gli_amount_per_year how much is gli insurance cost (euros/year)
+  # @options simulation [Integer] :house_insurance_pno_amount_per_year how much is pno insurance cost (euros/year)
   # @options simulation [Integer] :credit_loan_amount how much is credit loan amount (euros)
   # @options simulation [Integer] :credit_loan_duration how long is the credit (years)
+  # @options simulation [Integer] :credit_loan_cumulative_interests_paid_for_year_two how much is the credit interest cost for year 2 (euros/year)
+  # @options simulation [Integer] :credit_loan_insurance_amount_per_year how much is the credit insurance cost (euros/year)
   # @options simulation [String] :fiscal_status what fiscal status has been chosen
   # @options simulation [String] :fiscal_regimen what fiscal regimen has been chosen
   # @options simulation [Integer] :fiscal_revenues_p1 salary from person 1 of the fiscal household (euros)

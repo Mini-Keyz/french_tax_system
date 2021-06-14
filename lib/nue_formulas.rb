@@ -30,22 +30,16 @@ module FrenchTaxSystem
     # @options fiscal_year* [Integer] :negative_taxable_property_income_amount_to_postpone negative taxable property income amount to postpone to the next fiscal year
     def calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
       # Calculate net taxable property income amount thks to fiscal regimen
-      net_taxable_property_income_amount = case simulation[:fiscal_regimen]
-                                           when "Forfait"
-                                             calc_flat_rate_regimen_net_taxable_property_income_amount(simulation)
-                                           when "Réel"
-                                             calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
-                                           end
-
-      # Return a hash
-      {
-        "fiscal_year#{investment_fiscal_year}".to_sym => net_taxable_property_income_amount
-      }
+      case simulation[:fiscal_regimen]
+      when "Forfait"
+        calc_flat_rate_regimen_net_taxable_property_income_amount(simulation)
+      when "Réel"
+        calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+      end
     end
 
     def calc_flat_rate_regimen_net_taxable_property_income_amount(simulation)
       net_taxable_property_income_amount = simulation[:house_rent_amount_per_year] * (1 - PROPERTY_INCOME_STANDARD_ALLOWANCE)
-
       {
         net_taxable_property_income_amount: net_taxable_property_income_amount,
         negative_taxable_property_income?: false,
@@ -55,17 +49,17 @@ module FrenchTaxSystem
 
     def calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
       # Calculate net taxable property income amount depending on fiscal year
-      net_taxable_property_income_amount = if investment_fiscal_year == 1
-                                             deductible_expenses = FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES[:fiscal_year1].map do |expense|
-                                               simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
-                                             end.sum
-                                             simulation[:house_rent_amount_per_year] - deductible_expenses
-                                           elsif investment_fiscal_year >= 2
-                                             deductible_expenses = FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES[:fiscal_year2].map do |expense|
-                                               simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
-                                             end.sum
-                                             simulation[:house_rent_amount_per_year] - deductible_expenses
-                                           end
+      deductible_expenses = if investment_fiscal_year == 1
+                              FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES[:fiscal_year1].map do |expense|
+                                simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
+                              end.sum
+                            elsif investment_fiscal_year >= 2
+                              FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES[:fiscal_year2].map do |expense|
+                                simulation.key?(expense.to_sym) ? simulation[expense.to_sym] : 0
+                              end.sum
+                            end
+
+      net_taxable_property_income_amount = simulation[:house_rent_amount_per_year] - deductible_expenses
 
       # Add postponed negative taxable property income from previous fiscal year
       net_taxable_property_income_amount -= postponed_negative_taxable_property_income_from_previous_fiscal_year
