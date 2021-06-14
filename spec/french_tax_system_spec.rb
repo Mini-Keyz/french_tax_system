@@ -555,6 +555,32 @@ RSpec.describe FrenchTaxSystem do
       end
     end
 
+    describe "#apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)" do
+      it "returns final tax income with the reduced income tax for low incomes" do
+        result_lyon = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lyon)
+        result_bordeaux = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_bordeaux)
+        result_nimes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_nimes)
+        result_lille = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_lille)
+        result_agen = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_agen)
+        result_grenoble = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_grenoble)
+        result_toulouse = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_toulouse)
+        result_limoges = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_limoges)
+        result_rennes = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_rennes)
+        result_tours = FrenchTaxSystem.calc_fiscal_nb_parts_incurred_from_children(simulation_tours)
+        expect(result_lyon).to eq(1.5)
+        expect(result_bordeaux).to eq(2)
+        expect(result_nimes).to eq(2.5)
+        expect(result_lille).to eq(1.5)
+        expect(result_agen).to eq(2)
+        expect(result_grenoble).to eq(0)
+        expect(result_toulouse).to eq(1)
+        expect(result_limoges).to eq(2.5)
+        expect(result_rennes).to eq(2.5)
+        expect(result_tours).to eq(0)
+      end
+    end
+    
+
     describe "#calc_income_taxes_scale(simulation, calculation_method)" do
       it "returns the corresponding income tax scale on which revenues are taxed" do
         result_lyon = FrenchTaxSystem.calc_income_taxes_scale(simulation_lyon, "without_property_income", 2)
