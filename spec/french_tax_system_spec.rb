@@ -152,7 +152,7 @@ RSpec.describe FrenchTaxSystem do
         expect(result_tours).to be_a(Hash)
       end
 
-      it "returns the income tax per year" do
+      it "returns the income tax" do
         result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
         result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
         result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
@@ -173,6 +173,121 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:income_tax_amount]).to be_within(0.01).of(37_786.56)
         expect(result_rennes[:income_tax_amount]).to be_within(0.01).of(0)
         expect(result_tours[:income_tax_amount]).to be_within(0.01).of(10_285.9)
+      end
+
+      it "returns the average tax rate" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:average_tax_rate]).to be_within(0.001).of(0.1144)
+        expect(result_bordeaux[:average_tax_rate]).to be_within(0.001).of(0.0165)
+        expect(result_nimes[:average_tax_rate]).to be_within(0.001).of(0.1479)
+        expect(result_lille[:average_tax_rate]).to be_within(0.001).of(0.0427)
+        expect(result_agen[:average_tax_rate]).to be_within(0.001).of(0.1173)
+        expect(result_grenoble[:average_tax_rate]).to be_within(0.001).of(0.1096)
+        expect(result_toulouse[:average_tax_rate]).to be_within(0.001).of(0)
+        expect(result_limoges[:average_tax_rate]).to be_within(0.001).of(0.2099)
+        expect(result_rennes[:average_tax_rate]).to be_within(0.001).of(0)
+        expect(result_tours[:average_tax_rate]).to be_within(0.001).of(0.1385)
+      end
+
+      it "returns the global net taxable amount" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:global_net_taxable_income_amount]).to be_within(0.01).of(90_000)
+        expect(result_bordeaux[:global_net_taxable_income_amount]).to be_within(0.01).of(54_000)
+        expect(result_nimes[:global_net_taxable_income_amount]).to be_within(0.01).of(130_500)
+        expect(result_lille[:global_net_taxable_income_amount]).to be_within(0.01).of(49_500)
+        expect(result_agen[:global_net_taxable_income_amount]).to be_within(0.01).of(100_000)
+        expect(result_grenoble[:global_net_taxable_income_amount]).to be_within(0.01).of(31_500)
+        expect(result_toulouse[:global_net_taxable_income_amount]).to be_within(0.01).of(22_500)
+        expect(result_limoges[:global_net_taxable_income_amount]).to be_within(0.01).of(180_000)
+        expect(result_rennes[:global_net_taxable_income_amount]).to be_within(0.01).of(45_000)
+        expect(result_tours[:global_net_taxable_income_amount]).to be_within(0.01).of(74_250)
+      end
+
+      it "returns the net property taxable amount" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_bordeaux[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_nimes[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_lille[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_agen[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_grenoble[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_toulouse[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_limoges[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_rennes[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_tours[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+      end
+
+      it "returns true if there is a negative taxable property income" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:negative_taxable_property_income?]).to eq(false)
+        expect(result_bordeaux[:negative_taxable_property_income?]).to eq(false)
+        expect(result_nimes[:negative_taxable_property_income?]).to eq(false)
+        expect(result_lille[:negative_taxable_property_income?]).to eq(false)
+        expect(result_agen[:negative_taxable_property_income?]).to eq(false)
+        expect(result_grenoble[:negative_taxable_property_income?]).to eq(false)
+        expect(result_toulouse[:negative_taxable_property_income?]).to eq(false)
+        expect(result_limoges[:negative_taxable_property_income?]).to eq(false)
+        expect(result_rennes[:negative_taxable_property_income?]).to eq(false)
+        expect(result_tours[:negative_taxable_property_income?]).to eq(false)
+      end
+
+      it "returns the negative taxable property income to the next fiscal year" do
+        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_bordeaux[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_nimes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_lille[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_agen[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_grenoble[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_toulouse[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_limoges[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_rennes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
       end
     end
 
@@ -360,7 +475,7 @@ RSpec.describe FrenchTaxSystem do
     end
   end
 
-  describe "Independent from property income" do
+  describe "Not related to property income" do
     let(:simulation_fiscal_parts_one) do
       {
         fiscal_marital_status: "Célibataire",

@@ -61,37 +61,7 @@ module FrenchTaxSystem
 
   # Methods
 
-  # Calculate the taxes to pay with or without the generated income from the property investment
-  #
-  # @params [Hash] simulation a simulation created by Mini-Keyz app
-  # @options simulation [Integer] :house_price_bought_amount how much was the house bought (euros)
-  # @options simulation [Integer] :house_first_works_amount how much were the first works realized (euros)
-  # @options simulation [Integer] :house_landlord_charges_amount_per_year how much are the landlord charges (euros/year)
-  # @options simulation [Integer] :house_property_tax_amount_per_year how much is the property tax (euros/year)
-  # @options simulation [Integer] :house_rent_amount_per_month how much is the rent paid by the tenant (euros/month)
-  # @options simulation [Integer] :house_rent_amount_per_year how much is the rent paid by the tenant (euros/year)
-  # @options simulation [Integer] :house_property_management_amount_per_year how much is property management cost (euros/year)
-  # @options simulation [Integer] :credit_loan_amount how much is credit loan amount (euros)
-  # @options simulation [Integer] :credit_loan_duration how long is the credit (years)
-  # @options simulation [String] :fiscal_status what fiscal status has been chosen
-  # @options simulation [String] :fiscal_regimen what fiscal regimen has been chosen
-  # @options simulation [Integer] :fiscal_revenues_p1 salary from person 1 of the fiscal household (euros)
-  # @options simulation [Integer] :fiscal_revenues_p2 salary from person 2 of the fiscal household (euros)
-  # @options simulation [String] :fiscal_marital_status fiscal relation between the 'parents' of the household
-  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household (nb)
-  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household (nb)
-  # @params [String] calculation_method indicates if the calculation is made with or without the property income
-  # @params [Integer] postponed_negative_taxable_property_income_from_previous_fiscal_year the potentiel negative taxable income from the previous fiscal year
-  # @params [Integer] investment_fiscal_year the fisal year of the calculation
-  #
-  # @return [Hash] a hash made of the final income tax to pay (euros) and other values for the fiscal year inputed
-  # @options hash [Float] :income_tax_amount the income tax amount to pay for this fiscal year (euros)
-  # @options hash [Float] :global_net_taxable_income_amount the net taxable income from the household (euros)
-  # @options hash [Float] :net_taxable_property_income_amount the net taxable property income generated from the investment (euros)
-  # @options hash [Boolean] :negative_taxable_property_income? returns true or false if there is a negative taxable property income for this fiscal year
-  # @options hash [Float] :negative_taxable_property_income_amount_to_postpone the potential negative taxable property income to postpone to the next fiscal year (euros)
-  # @options hash [Float] :discount_on_low_income_tax_amount the amount of income tax reduction for low incomes (euros)
-  # @options hash [Integer] :fiscal_nb_parts the household's number of fiscal parts (nb)
+  # xxx
   def calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)
     # Iterate over investment first to top fiscal year and return an array which concatenates all hashes generated per fiscal year
     income_tax_array = []
