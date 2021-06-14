@@ -7,7 +7,7 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
       house_first_works_amount: 40_000,
       house_landlord_charges_amount_per_year: 3_600,
       house_property_management_amount_per_year: 1_856,
-      house_insurance_gli_amount_per_year: 814,
+      house_insurance_gli_amount_per_year: 812,
       house_insurance_pno_amount_per_year: 100,
       house_property_tax_amount_per_year: 2_000,
       credit_loan_cumulative_interests_paid_for_year_two: 5_499.91,
@@ -202,55 +202,103 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
   end
 
   describe "For 'Reel' fiscal regimen" do
-    describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-      it "returns the net taxable property income amount incurred from the potential investment" do
-        result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 1)
-        expect(result_lyon_first_year).to be_a(Hash)
-        expect(result_lyon_first_year).to be_within(0.01).of(2_500)
+    # describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+    #   it "returns the net taxable property income amount incurred from the potential investment" do
+    #     result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 1)
+    #     expect(result_lyon_first_year).to be_a(Hash)
+    #     expect(result_lyon_first_year).to be_within(0.01).of(2_500)
+    #   end
+    # end
+
+    # describe "#calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+    #   it "returns correct values for each hash keys" do
+    #     result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 0, 1)
+    #     expect(result_lyon_first_year).to be_a(Hash)
+    #     expect(result_lyon_first_year).to be_within(0.01).of(2_500)
+    #   end
+    # end
+
+    describe "#calc_deductible_expenses_sum(simulation, investment_fiscal_year)" do
+      it "returns deductible expenses for year 1" do
+        result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 1)
+        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 1)
+        result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 1)
+        result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 1)
+        result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 1)
+        result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 1)
+        result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 1)
+        result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 1)
+        result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 1)
+        result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 1)
+        expect(result_lyon).to be_within(0.01).of(55_607.91)
+        expect(result_bordeaux).to be_within(0.01).of(8_815.08)
+        expect(result_nimes).to be_within(0.01).of(156_921.46)
+        expect(result_lille).to be_within(0.01).of(4_564.66)
+        expect(result_agen).to be_within(0.01).of(10_313.92)
+        expect(result_grenoble).to be_within(0.01).of(13_372.40)
+        expect(result_toulouse).to be_within(0.01).of(2_037.72)
+        expect(result_limoges).to be_within(0.01).of(39_129.20)
+        expect(result_rennes).to be_within(0.01).of(58_546.17)
+        expect(result_tours).to be_within(0.01).of(34_073.44)
+      end
+
+      it "returns deductible expenses for year 2" do
+        result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 2)
+        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 2)
+        result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 2)
+        result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 2)
+        result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 2)
+        result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 2)
+        result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 2)
+        result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 2)
+        result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 2)
+        result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 2)
+        expect(result_lyon).to be_within(0.01).of(15_607.91)
+        expect(result_bordeaux).to be_within(0.01).of(3_815.08)
+        expect(result_nimes).to be_within(0.01).of(31_921.46)
+        expect(result_lille).to be_within(0.01).of(2_064.66)
+        expect(result_agen).to be_within(0.01).of(10_313.92)
+        expect(result_grenoble).to be_within(0.01).of(3_372.40)
+        expect(result_toulouse).to be_within(0.01).of(2_037.72)
+        expect(result_limoges).to be_within(0.01).of(14_129.20)
+        expect(result_rennes).to be_within(0.01).of(8_546.17)
+        expect(result_tours).to be_within(0.01).of(9_073.44)
       end
     end
 
-    describe "#calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-      it "returns correct values for each hash keys" do
-        result_lyon_first_year = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 0, 1)
-        expect(result_lyon_first_year).to be_a(Hash)
-        expect(result_lyon_first_year).to be_within(0.01).of(2_500)
-      end
-    end
+    # describe "#calc_taxable_property_income_repartition(simulation, net_taxable_property_income_amount)" do
+    #   context "when net_taxable_property_income_amount is negative" do
+    #     context "when net_property_income_minus_loan_interet_cost is positive AND net_taxable_property_income_amount is less than CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT" do
+    #       it "returns correct values for each hash keys" do
+    #         result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
+    #         expect(result_lyon).to be_a(Hash)
+    #         expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
+    #         expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
+    #         expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+    #       end
+    #     end
 
-    describe "#calc_taxable_property_income_repartition(simulation, net_taxable_property_income_amount)" do
-      context "when net_taxable_property_income_amount is negative" do
-        context "when net_property_income_minus_loan_interet_cost is positive AND net_taxable_property_income_amount is less than CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT" do
-          it "returns correct values for each hash keys" do
-            result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
-            expect(result_lyon).to be_a(Hash)
-            expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
-            expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
-            expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-          end
-        end
+    #     context "when net_property_income_minus_loan_interet_cost is positive AND net_taxable_property_income_amount is less than CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT" do
+    #       it "returns correct values for each hash keys" do
+    #         result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
+    #         expect(result_lyon).to be_a(Hash)
+    #         expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
+    #         expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
+    #         expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+    #       end
+    #     end
 
-        context "when net_property_income_minus_loan_interet_cost is positive AND net_taxable_property_income_amount is less than CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT" do
-          it "returns correct values for each hash keys" do
-            result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
-            expect(result_lyon).to be_a(Hash)
-            expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
-            expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
-            expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-          end
-        end
-
-        context "when net_property_income_minus_loan_interet_cost is negative" do
-          it "returns correct values for each hash keys" do
-            simulation_lyon[:credit_loan_cumulative_interests_paid_for_year_two] = 2_500
-            result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
-            expect(result_lyon).to be_a(Hash)
-            expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
-            expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
-            expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-          end
-        end
-      end
-    end
+    #     context "when net_property_income_minus_loan_interet_cost is negative" do
+    #       it "returns correct values for each hash keys" do
+    #         simulation_lyon[:credit_loan_cumulative_interests_paid_for_year_two] = 2_500
+    #         result_lyon = FrenchTaxSystem::NueFormulas.calc_taxable_property_income_repartition(simulation_lyon, -5_000)
+    #         expect(result_lyon).to be_a(Hash)
+    #         expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-5_000)
+    #         expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
+    #         expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+    #       end
+    #     end
+    #   end
+    # end
   end
 end
