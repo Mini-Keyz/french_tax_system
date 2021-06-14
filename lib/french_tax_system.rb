@@ -312,6 +312,26 @@ module FrenchTaxSystem
     end
   end
 
+  # Calculate the aggregated tax amount
+  #
+  # @params [Integer] family_quotient_amount the household's quotient amount (euros)
+  # @params [Integer] current_year the current_year of the calculation (nb)
+  #
+  # @return [Integer] the aggregated tax amount (euros)
+  def calc_aggregated_tax_amount(family_quotient_amount, current_year)
+    income_taxes_scale = INCOME_TAXES_SCALE["year#{current_year}".to_sym]
+
+    income_taxes_scale.map do |scale|
+      if family_quotient_amount < scale[:family_quotient_amount][:start_scale]
+        0
+      elsif family_quotient_amount >= scale[:family_quotient_amount][:start_scale] && family_quotient_amount < scale[:family_quotient_amount][:end_scale]
+        (family_quotient_amount - scale[:family_quotient_amount][:start_scale]) * scale[:tax]
+      elsif family_quotient_amount >= scale[:family_quotient_amount][:end_scale]
+        (scale[:family_quotient_amount][:end_scale] - scale[:family_quotient_amount][:start_scale]) * scale[:tax]
+      end
+    end.sum
+  end
+
   def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
     if simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
       discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_single_person_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
@@ -331,20 +351,6 @@ module FrenchTaxSystem
     when "LMNP"
       LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     end
-  end
-
-  def calc_aggregated_tax_amount(family_quotient_amount, current_year)
-    income_taxes_scale = INCOME_TAXES_SCALE["year#{current_year}".to_sym]
-
-    income_taxes_scale.map do |scale|
-      if family_quotient_amount < scale[:family_quotient_amount][:start_scale]
-        0
-      elsif family_quotient_amount >= scale[:family_quotient_amount][:start_scale] && family_quotient_amount < scale[:family_quotient_amount][:end_scale]
-        (family_quotient_amount - scale[:family_quotient_amount][:start_scale]) * scale[:tax]
-      elsif family_quotient_amount >= scale[:family_quotient_amount][:end_scale]
-        (scale[:family_quotient_amount][:end_scale] - scale[:family_quotient_amount][:start_scale]) * scale[:tax]
-      end
-    end.sum
   end
 
   def calc_income_taxes_scale(simulation, calculation_method, investment_fiscal_year)

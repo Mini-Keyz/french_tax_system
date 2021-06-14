@@ -502,16 +502,56 @@ RSpec.describe FrenchTaxSystem do
     end
 
     describe "#calc_aggregated_tax_amount(family_quotient_amount, current_year)" do
-      it "returns the aggregated tax amount" do
-        current_year = Date.today.year
-        result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(30_000, current_year)
-        result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(13_500, current_year)
-        result_lyon_with_property_income = FrenchTaxSystem.calc_aggregated_tax_amount(36_666.67, current_year)
-        result_bordeaux_with_property_income = FrenchTaxSystem.calc_aggregated_tax_amount(14_000, current_year)
-        expect(result_lyon).to be_within(0.01).of(3005.45)
-        expect(result_bordeaux).to be_within(0.01).of(375.65)
-        expect(result_lyon_with_property_income).to be_within(0.01).of(5005.45)
-        expect(result_bordeaux_with_property_income).to be_within(0.01).of(430.65)
+      context "for real fiscal parts" do
+        it "returns the aggregated tax amount" do
+          current_year = Date.today.year
+          result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(25_714.28, current_year)
+          result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(13_500, current_year)
+          result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(28_888.89, current_year)
+          result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(16_500, current_year)
+          result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(25_000, current_year)
+          result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_500, current_year)
+          result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(9_000, current_year)
+          result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(40_000, current_year)
+          result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(11_250, current_year)
+          result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(37_125, current_year)
+          expect(result_lyon).to be_within(0.01).of(1_719.73)
+          expect(result_bordeaux).to be_within(0.01).of(375.65)
+          expect(result_nimes).to be_within(0.01).of(2_672.12)
+          expect(result_lille).to be_within(0.01).of(705.65)
+          expect(result_agen).to be_within(0.01).of(1_640.65)
+          expect(result_grenoble).to be_within(0.01).of(3_455.45)
+          expect(result_toulouse).to be_within(0.01).of(0)
+          expect(result_limoges).to be_within(0.01).of(6_005.45)
+          expect(result_rennes).to be_within(0.01).of(128.15)
+          expect(result_tours).to be_within(0.01).of(5_142.95)
+        end
+      end
+
+      context "for fiscal parts capping" do
+        it "returns the aggregated tax amount" do
+          current_year = Date.today.year
+          result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(45_000, current_year)
+          result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(27_000, current_year)
+          result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(65_000, current_year)
+          result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(49_500, current_year)
+          result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(50_000, current_year)
+          result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_500, current_year)
+          result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(22_500, current_year)
+          result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(90_000, current_year)
+          result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(45_000, current_year)
+          result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(37_125, current_year)
+          expect(result_lyon).to be_within(0.01).of(7_505.45)
+          expect(result_bordeaux).to be_within(0.01).of(2_105.45)
+          expect(result_nimes).to be_within(0.01).of(13_505.45)
+          expect(result_lille).to be_within(0.01).of(8_855.45)
+          expect(result_agen).to be_within(0.01).of(9_005.45)
+          expect(result_grenoble).to be_within(0.01).of(3_455.45)
+          expect(result_toulouse).to be_within(0.01).of(1_365.65)
+          expect(result_limoges).to be_within(0.01).of(22_818.28)
+          expect(result_rennes).to be_within(0.01).of(7_505.45)
+          expect(result_tours).to be_within(0.01).of(5_142.95)
+        end
       end
     end
 
