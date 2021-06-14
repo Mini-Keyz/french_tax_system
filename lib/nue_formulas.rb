@@ -78,7 +78,6 @@ module FrenchTaxSystem
     def calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
       # Calculate net taxable property income amount depending on fiscal year
       deductible_expenses = calc_deductible_expenses_sum(simulation, investment_fiscal_year)
-
       net_taxable_property_income_amount = simulation[:house_rent_amount_per_year] - deductible_expenses
 
       # Add postponed negative taxable property income from previous fiscal year
