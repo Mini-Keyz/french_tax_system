@@ -28,7 +28,7 @@ module FrenchTaxSystem
   FAMILY_QUOTIENT_CAPPING_AMOUNT = {
     ## Per half fiscal parts for children
     year2021: {
-      married_household: {
+      married_couple_household: {
         half_part: 1570
       },
       single_person_household: {
@@ -206,9 +206,14 @@ module FrenchTaxSystem
       # We make the assumption that when 'Celibataire' the parent lives alone, so the fiscal part incurred from the first children (ie the biggest one in term of fiscal part) is double
       if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
         FISCAL_NB_PARTS_FOR_SINGLE_PERSON
-      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] >= 1
+
+      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 1
         FISCAL_NB_PARTS_FOR_SINGLE_PERSON + FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN + calc_fiscal_nb_parts_incurred_from_children(simulation)
-      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 0
+
+      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] >= 2
+        FISCAL_NB_PARTS_FOR_SINGLE_PERSON + 2 * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN + calc_fiscal_nb_parts_incurred_from_children(simulation)
+
+      elsif simulation[:fiscal_nb_dependent_children] >= 1
         FISCAL_NB_PARTS_FOR_SINGLE_PERSON + FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN + calc_fiscal_nb_parts_incurred_from_children(simulation)
       end
     end
@@ -260,6 +265,43 @@ module FrenchTaxSystem
     end
   end
 
+  # Calculate the capping income tax deduction from fiscal parts
+  #
+  # @params [Hash] simulation a simulation created by Mini-Keyz app
+  # @options simulation [Integer] :fiscal_nb_dependent_children number of dependent children of fiscal household
+  # @options simulation [Integer] :fiscal_nb_alternate_custody_children number of alternate custody children of fiscal household
+  # @params [Integer] fiscal_nb_parts the household's number of fiscal parts
+  # @params [Integer] current_year the current_year of the calculation
+  #
+  # @return [Integer] the capping income tax deduction from fiscal parts (euros)
+  def calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
+    case simulation[:fiscal_marital_status]
+    when "Marié / Pacsé"
+      (fiscal_nb_parts - FISCAL_NB_PARTS_FOR_MARRIED_COUPLE) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:married_couple_household][:half_part] * 2
+    when "Célibataire"
+      # When single parent household, sicne we consider it as 'parent isole', the first half part (if only alt custody children) or the first part (if at least one dependent child) is marked up
+      # It is linked to the doubled fiscal part for the first child (ie the biggest one in term of fiscal part) that we use in calc_fiscal_nb_parts
+      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
+        0
+
+      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 1
+        marked_up_half_part = FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part]
+        next_parts = (fiscal_nb_parts - 2 * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN - FISCAL_NB_PARTS_FOR_SINGLE_PERSON) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:half_part] * 2
+        marked_up_half_part + next_parts
+
+      elsif simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] >= 2
+        marked_up_part = FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part] * 2
+        next_parts = (fiscal_nb_parts - 2 * 2 * FISCAL_NB_PARTS_FOR_ALTERNATE_CUSTODY_CHILDREN - FISCAL_NB_PARTS_FOR_SINGLE_PERSON) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:half_part] * 2
+        marked_up_part + next_parts
+
+      elsif simulation[:fiscal_nb_dependent_children] >= 1
+        marked_up_part = FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part] * 2
+        next_parts = (fiscal_nb_parts - 2 * FISCAL_NB_PARTS_FOR_DEPENDENT_CHILDREN - FISCAL_NB_PARTS_FOR_SINGLE_PERSON) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:half_part] * 2
+        marked_up_part + next_parts
+      end
+    end
+  end
+
   def apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)
     if simulation[:fiscal_marital_status] == "Célibataire" && almost_final_income_tax <= DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:threshold_single_person_household]
       discount_to_apply = DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:lump_sum_single_person_household] - (almost_final_income_tax * DISCOUNT_ON_LOW_INCOME_TAX["year#{current_year}".to_sym][:discount_percentage])
@@ -269,24 +311,6 @@ module FrenchTaxSystem
       almost_final_income_tax - discount_to_apply
     else
       almost_final_income_tax
-    end
-  end
-
-  def calc_capping_due_to_fiscal_parts(simulation, fiscal_nb_parts, current_year)
-    case simulation[:fiscal_marital_status]
-    when "Marié / Pacsé"
-      (fiscal_nb_parts - FISCAL_NB_PARTS_FOR_MARRIED_COUPLE) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:married_household][:half_part] * 2
-    when "Célibataire"
-      if simulation[:fiscal_nb_dependent_children] == 0 && simulation[:fiscal_nb_alternate_custody_children] == 0
-        0
-      elsif simulation[:fiscal_nb_dependent_children] >= 1 || simulation[:fiscal_nb_alternate_custody_children] >= 2
-        # First part is marked-up for single parent, and then normal calculation
-        FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part] * 2 +
-          (fiscal_nb_parts - 1 - FISCAL_NB_PARTS_FOR_SINGLE_PERSON) * FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:half_part] * 2
-      elsif simulation[:fiscal_nb_alternate_custody_children] == 1 && simulation[:fiscal_nb_dependent_children] == 0
-        # First part is marked-up for single parent, and then normal calculation
-        FAMILY_QUOTIENT_CAPPING_AMOUNT["year#{current_year}".to_sym][:single_person_household][:marked_up_half_part]
-      end
     end
   end
 
