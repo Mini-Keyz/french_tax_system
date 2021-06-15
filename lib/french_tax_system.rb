@@ -182,10 +182,10 @@ module FrenchTaxSystem
     net_taxable_property_income_amount = calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
 
     # Return the social contributions to pay in addition to income taxes (it really never ends...)
-    if net_taxable_property_income_amount <= 0
+    if net_taxable_property_income_amount[:net_taxable_property_income_amount] <= 0
       0
     else
-      net_taxable_property_income_amount * SOCIAL_CONTRIBUTIONS_PERCENTAGE
+      net_taxable_property_income_amount[:net_taxable_property_income_amount] * SOCIAL_CONTRIBUTIONS_PERCENTAGE
     end
   end
 
