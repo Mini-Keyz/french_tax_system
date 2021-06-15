@@ -393,6 +393,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_limoges, 0)
         result_rennes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_rennes, 0)
         result_tours = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_tours, 0)
+        result_toulon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulon, 0)
+        result_la_ciotat = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_la_ciotat, 0)
         expect(result_lyon).to be_within(0.01).of(90_000)
         expect(result_bordeaux).to be_within(0.01).of(54_000)
         expect(result_nimes).to be_within(0.01).of(130_500)
@@ -403,6 +405,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges).to be_within(0.01).of(180_000)
         expect(result_rennes).to be_within(0.01).of(45_000)
         expect(result_tours).to be_within(0.01).of(74_250)
+        expect(result_toulon).to be_within(0.01).of(292_500)
+        expect(result_la_ciotat).to be_within(0.01).of(166_500)
       end
     end
 
