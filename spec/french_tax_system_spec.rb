@@ -423,6 +423,8 @@ RSpec.describe FrenchTaxSystem do
           result_limoges = FrenchTaxSystem.calc_family_quotient_amount(180_000, 4.5)
           result_rennes = FrenchTaxSystem.calc_family_quotient_amount(45_000, 4)
           result_tours = FrenchTaxSystem.calc_family_quotient_amount(74_250, 2)
+          result_toulon = FrenchTaxSystem.calc_family_quotient_amount(292_500, 4)
+          result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(166_500, 2.5)
           expect(result_lyon).to be_within(0.01).of(25_714.28)
           expect(result_bordeaux).to be_within(0.01).of(13_500)
           expect(result_nimes).to be_within(0.01).of(29_000)
@@ -433,6 +435,8 @@ RSpec.describe FrenchTaxSystem do
           expect(result_limoges).to be_within(0.01).of(40_000)
           expect(result_rennes).to be_within(0.01).of(11_250)
           expect(result_tours).to be_within(0.01).of(37_125)
+          expect(result_toulon).to be_within(0.01).of(73_125)
+          expect(result_la_ciotat).to be_within(0.01).of(66_600)
         end
       end
 
@@ -448,6 +452,8 @@ RSpec.describe FrenchTaxSystem do
           result_limoges = FrenchTaxSystem.calc_family_quotient_amount(180_000, 2)
           result_rennes = FrenchTaxSystem.calc_family_quotient_amount(45_000, 1)
           result_tours = FrenchTaxSystem.calc_family_quotient_amount(74_250, 2)
+          result_toulon = FrenchTaxSystem.calc_family_quotient_amount(292_500, 2)
+          result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(166_500, 2)
           expect(result_lyon).to be_within(0.01).of(45_000)
           expect(result_bordeaux).to be_within(0.01).of(27_000)
           expect(result_nimes).to be_within(0.01).of(65_250)
@@ -458,6 +464,8 @@ RSpec.describe FrenchTaxSystem do
           expect(result_limoges).to be_within(0.01).of(90_000)
           expect(result_rennes).to be_within(0.01).of(45_000)
           expect(result_tours).to be_within(0.01).of(37_125)
+          expect(result_toulon).to be_within(0.01).of(146_250)
+          expect(result_la_ciotat).to be_within(0.01).of(83_250)
         end
       end
     end
