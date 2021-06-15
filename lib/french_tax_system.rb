@@ -387,6 +387,10 @@ module FrenchTaxSystem
       NueFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
     when "LMNP"
       LmnpFormulas.calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)
+    when nil
+      raise ArgumentError, "fiscal_status can't be nil"
+    else
+      raise ArgumentError, "Not a valid fiscal status, it should be one available"
     end
   end
 end

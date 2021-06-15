@@ -154,6 +154,14 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
   let(:simulation_toulon) do
     {
       house_rent_amount_per_year: 29_736,
+      house_first_works_amount: 15_000,
+      house_landlord_charges_amount_per_year: 3_250,
+      house_property_management_amount_per_year: 0,
+      house_insurance_gli_amount_per_year: 1040.76,
+      house_insurance_pno_amount_per_year: 100,
+      house_property_tax_amount_per_year: 3_000,
+      credit_loan_cumulative_interests_paid_for_year_two: 4_741.31,
+      credit_loan_insurance_amount_per_year: 1_500,
       fiscal_regimen: "Forfait"
     }
   end
@@ -161,6 +169,14 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
   let(:simulation_la_ciotat) do
     {
       house_rent_amount_per_year: 12_512,
+      house_first_works_amount: 5_000,
+      house_landlord_charges_amount_per_year: 1_500,
+      house_property_management_amount_per_year: 0,
+      house_insurance_gli_amount_per_year: 437.92,
+      house_insurance_pno_amount_per_year: 100,
+      house_property_tax_amount_per_year: 1_250,
+      credit_loan_cumulative_interests_paid_for_year_two: 2_909.43,
+      credit_loan_insurance_amount_per_year: 960,
       fiscal_regimen: "Forfait"
     }
   end
