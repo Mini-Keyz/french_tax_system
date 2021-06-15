@@ -151,21 +151,21 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
     }
   end
 
+  let(:simulation_toulon) do
+    {
+      house_rent_amount_per_year: 29_736,
+      fiscal_regimen: "Forfait"
+    }
+  end
+
+  let(:simulation_la_ciotat) do
+    {
+      house_rent_amount_per_year: 12_512,
+      fiscal_regimen: "Forfait"
+    }
+  end
+
   describe "For 'Forfait' fiscal regimen" do
-    let(:simulation_toulon) do
-      {
-        house_rent_amount_per_year: 12_000,
-        fiscal_regimen: "Forfait"
-      }
-    end
-
-    let(:simulation_la_ciotat) do
-      {
-        house_rent_amount_per_year: 2_400,
-        fiscal_regimen: "Forfait"
-      }
-    end
-
     describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
       it "returns a nice hash" do
         result_toulon_first_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulon, 0, 1)
@@ -183,20 +183,19 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
         result_toulon_second_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulon, 0, 2)
         result_toulon_tenth_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulon, 0, 10)
         result_la_ciotat_fifteenth_year = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_la_ciotat, 0, 15)
-        expect(result_toulon_first_year[:net_taxable_property_income_amount]).to be_within(0.01).of(8_400)
-        expect(result_toulon_second_year[:net_taxable_property_income_amount]).to be_within(0.01).of(8_400)
-        expect(result_toulon_tenth_year[:net_taxable_property_income_amount]).to be_within(0.01).of(8_400)
-        expect(result_la_ciotat_fifteenth_year[:net_taxable_property_income_amount]).to be_within(0.01).of(1_680)
+        expect(result_toulon_first_year[:net_taxable_property_income_amount]).to be_within(0.01).of(20_815.20)
+        expect(result_toulon_second_year[:net_taxable_property_income_amount]).to be_within(0.01).of(20_815.20)
+        expect(result_toulon_tenth_year[:net_taxable_property_income_amount]).to be_within(0.01).of(20_815.20)
+        expect(result_la_ciotat_fifteenth_year[:net_taxable_property_income_amount]).to be_within(0.01).of(8_758.40)
       end
     end
 
     describe "#calc_flat_rate_regimen_net_taxable_property_income_amount(simulation)" do
       it "returns the net taxable property income amount" do
         result_toulon = FrenchTaxSystem::NueFormulas.calc_flat_rate_regimen_net_taxable_property_income_amount(simulation_toulon)
-        expect(result_toulon[:net_taxable_property_income_amount]).to be_within(0.01).of(8_400)
-
         result_la_ciotat = FrenchTaxSystem::NueFormulas.calc_flat_rate_regimen_net_taxable_property_income_amount(simulation_la_ciotat)
-        expect(result_la_ciotat[:net_taxable_property_income_amount]).to be_within(0.01).of(1_680)
+        expect(result_toulon[:net_taxable_property_income_amount]).to be_within(0.01).of(20_815.20)
+        expect(result_la_ciotat[:net_taxable_property_income_amount]).to be_within(0.01).of(8_758.40)
       end
     end
   end
