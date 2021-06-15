@@ -484,6 +484,8 @@ RSpec.describe FrenchTaxSystem do
           result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(40_000, current_year)
           result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(11_250, current_year)
           result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(37_125, current_year)
+          result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(73_125, current_year)
+          result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(66_600, current_year)
           expect(result_lyon).to be_within(0.01).of(1_719.73)
           expect(result_bordeaux).to be_within(0.01).of(375.65)
           expect(result_nimes).to be_within(0.01).of(2_705.45)
@@ -494,6 +496,8 @@ RSpec.describe FrenchTaxSystem do
           expect(result_limoges).to be_within(0.01).of(6_005.45)
           expect(result_rennes).to be_within(0.01).of(128.15)
           expect(result_tours).to be_within(0.01).of(5_142.95)
+          expect(result_toulon).to be_within(0.01).of(15_942.95)
+          expect(result_la_ciotat).to be_within(0.01).of(13_985.45)
         end
       end
 
@@ -510,6 +514,8 @@ RSpec.describe FrenchTaxSystem do
           result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(90_000, current_year)
           result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(45_000, current_year)
           result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(37_125, current_year)
+          result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(146_250, current_year)
+          result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(83_250, current_year)
           expect(result_lyon).to be_within(0.01).of(7_505.45)
           expect(result_bordeaux).to be_within(0.01).of(2_105.45)
           expect(result_nimes).to be_within(0.01).of(13_580.45)
@@ -520,6 +526,8 @@ RSpec.describe FrenchTaxSystem do
           expect(result_limoges).to be_within(0.01).of(22_818.28)
           expect(result_rennes).to be_within(0.01).of(7_505.45)
           expect(result_tours).to be_within(0.01).of(5_142.95)
+          expect(result_toulon).to be_within(0.01).of(45_880.78)
+          expect(result_la_ciotat).to be_within(0.01).of(20_050.78)
         end
       end
     end
@@ -536,6 +544,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(6_005.45, 4.5, 22_818.28, 2, 7_850)
         result_rennes = FrenchTaxSystem.apply_fiscal_parts_capping(128.15, 4, 7_505.45, 1, 9_984)
         result_tours = FrenchTaxSystem.apply_fiscal_parts_capping(5_142.95, 2, 5_142.95, 2, 0)
+        result_toulon = FrenchTaxSystem.apply_fiscal_parts_capping(15_942.95, 4, 45_880.78, 2, 6_280)
+        result_la_ciotat = FrenchTaxSystem.apply_fiscal_parts_capping(13_985.45, 2.5, 20_050.78, 2, 1_570)
         expect(result_lyon).to be_within(0.01).of(10_300.9)
         expect(result_bordeaux).to be_within(0.01).of(1_502.6)
         expect(result_nimes).to be_within(0.01).of(19_310.9)
@@ -546,6 +556,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges).to be_within(0.01).of(37_786.56)
         expect(result_rennes).to be_within(0.01).of(512.6)
         expect(result_tours).to be_within(0.01).of(10_285.9)
+        expect(result_toulon).to be_within(0.01).of(85_481.56)
+        expect(result_la_ciotat).to be_within(0.01).of(38_531.56)
       end
     end
 
@@ -563,6 +575,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 37_786.56, current_year)
         result_rennes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_rennes, 512.6, current_year)
         result_tours = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_tours, 10_285.9, current_year)
+        result_toulon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulon, 85_481.56, current_year)
+        result_la_ciotat = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_la_ciotat, 38_531.56, current_year)
         expect(result_lyon).to be_within(0.01).of(10_300.9)
         expect(result_bordeaux).to be_within(0.01).of(893.53) # Married couple household effect
         expect(result_nimes).to be_within(0.01).of(19_310.9)
@@ -573,6 +587,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges).to be_within(0.01).of(37_786.56)
         expect(result_rennes).to be_within(0.01).of(0) # Single person household effect
         expect(result_tours).to be_within(0.01).of(10_285.9)
+        expect(result_toulon).to be_within(0.01).of(85_481.56)
+        expect(result_la_ciotat).to be_within(0.01).of(38_531.56)
       end
     end
   end
