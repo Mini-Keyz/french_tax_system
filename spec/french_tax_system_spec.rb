@@ -101,6 +101,26 @@ RSpec.describe FrenchTaxSystem do
     }
   end
 
+  let(:simulation_toulon) do
+    {
+      fiscal_revenues_p1: 200_000,
+      fiscal_revenues_p2: 125_000,
+      fiscal_marital_status: "Marié / Pacsé",
+      fiscal_nb_dependent_children: 3,
+      fiscal_nb_alternate_custody_children: 0
+    }
+  end
+
+  let(:simulation_la_ciotat) do
+    {
+      fiscal_revenues_p1: 120_000,
+      fiscal_revenues_p2: 65_000,
+      fiscal_marital_status: "Marié / Pacsé",
+      fiscal_nb_dependent_children: 0,
+      fiscal_nb_alternate_custody_children: 2
+    }
+  end
+
   describe "Without any property income" do
     describe "#calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)" do
       it "returns a nice hash made of income tax params" do
