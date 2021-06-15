@@ -134,6 +134,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_limoges, "without_property_income", 10)
         result_rennes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_rennes, "without_property_income", 10)
         result_tours = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_tours, "without_property_income", 10)
+        result_toulon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulon, "without_property_income", 10)
+        result_la_ciotat = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_la_ciotat, "without_property_income", 10)
         # Results should not change between fiscal years because it is only based on fiscal_revenues_p1 & 2
         expect(result_lyon[0][:income_tax][:income_tax_amount]).to be_within(0.01).of(10_300.9)
         expect(result_bordeaux[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(893.53)
@@ -145,6 +147,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[7][:income_tax][:income_tax_amount]).to be_within(0.01).of(37_786.56)
         expect(result_rennes[8][:income_tax][:income_tax_amount]).to be_within(0.01).of(0)
         expect(result_tours[9][:income_tax][:income_tax_amount]).to be_within(0.01).of(10_285.9)
+        expect(result_toulon[8][:income_tax][:income_tax_amount]).to be_within(0.01).of(85_481.56)
+        expect(result_la_ciotat[7][:income_tax][:income_tax_amount]).to be_within(0.01).of(38_531.56)
       end
 
       it "returns a nice hash made of social contribution amount equal to 0" do
@@ -158,6 +162,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_limoges, "without_property_income", 10)
         result_rennes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_rennes, "without_property_income", 10)
         result_tours = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_tours, "without_property_income", 10)
+        result_toulon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulon, "without_property_income", 10)
+        result_la_ciotat = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_la_ciotat, "without_property_income", 10)
         # Results should not change between fiscal years because it is only based on fiscal_revenues_p1 & 2
         expect(result_lyon[0][:social_contributions_amount]).to eq(0)
         expect(result_bordeaux[1][:social_contributions_amount]).to eq(0)
@@ -169,6 +175,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[7][:social_contributions_amount]).to eq(0)
         expect(result_rennes[8][:social_contributions_amount]).to eq(0)
         expect(result_tours[9][:social_contributions_amount]).to eq(0)
+        expect(result_toulon[8][:social_contributions_amount]).to eq(0)
+        expect(result_la_ciotat[7][:social_contributions_amount]).to eq(0)
       end
     end
 
@@ -184,6 +192,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon).to be_a(Hash)
         expect(result_bordeaux).to be_a(Hash)
         expect(result_nimes).to be_a(Hash)
@@ -194,6 +204,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges).to be_a(Hash)
         expect(result_rennes).to be_a(Hash)
         expect(result_tours).to be_a(Hash)
+        expect(result_toulon).to be_a(Hash)
+        expect(result_la_ciotat).to be_a(Hash)
       end
 
       it "returns the income tax" do
@@ -207,6 +219,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:income_tax_amount]).to be_within(0.01).of(10_300.9)
         expect(result_bordeaux[:income_tax_amount]).to be_within(0.01).of(893.53)
         expect(result_nimes[:income_tax_amount]).to be_within(0.01).of(19_310.9)
@@ -217,6 +231,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:income_tax_amount]).to be_within(0.01).of(37_786.56)
         expect(result_rennes[:income_tax_amount]).to be_within(0.01).of(0)
         expect(result_tours[:income_tax_amount]).to be_within(0.01).of(10_285.9)
+        expect(result_toulon[:income_tax_amount]).to be_within(0.01).of(85_481.56)
+        expect(result_la_ciotat[:income_tax_amount]).to be_within(0.01).of(38_531.56)
       end
 
       it "returns the average tax rate" do
@@ -230,7 +246,9 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
-        expect(result_lyon[:average_tax_rate]).to be_within(0.001).of(0.1144)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
+        expect(result_lyon[:average_tax_rate]).to be_within(0.001).of(0.1145)
         expect(result_bordeaux[:average_tax_rate]).to be_within(0.001).of(0.0165)
         expect(result_nimes[:average_tax_rate]).to be_within(0.001).of(0.1479)
         expect(result_lille[:average_tax_rate]).to be_within(0.001).of(0.0427)
@@ -240,6 +258,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:average_tax_rate]).to be_within(0.001).of(0.2099)
         expect(result_rennes[:average_tax_rate]).to be_within(0.001).of(0)
         expect(result_tours[:average_tax_rate]).to be_within(0.001).of(0.1385)
+        expect(result_toulon[:average_tax_rate]).to be_within(0.001).of(0.2922)
+        expect(result_la_ciotat[:average_tax_rate]).to be_within(0.001).of(0.2314)
       end
 
       it "returns the global net taxable amount" do
@@ -253,6 +273,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:global_net_taxable_income_amount]).to be_within(0.01).of(90_000)
         expect(result_bordeaux[:global_net_taxable_income_amount]).to be_within(0.01).of(54_000)
         expect(result_nimes[:global_net_taxable_income_amount]).to be_within(0.01).of(130_500)
@@ -263,6 +285,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:global_net_taxable_income_amount]).to be_within(0.01).of(180_000)
         expect(result_rennes[:global_net_taxable_income_amount]).to be_within(0.01).of(45_000)
         expect(result_tours[:global_net_taxable_income_amount]).to be_within(0.01).of(74_250)
+        expect(result_toulon[:global_net_taxable_income_amount]).to be_within(0.01).of(292_500)
+        expect(result_la_ciotat[:global_net_taxable_income_amount]).to be_within(0.01).of(166_500)
       end
 
       it "returns the net property taxable amount" do
@@ -276,6 +300,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
         expect(result_bordeaux[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
         expect(result_nimes[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
@@ -286,6 +312,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
         expect(result_rennes[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
         expect(result_tours[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_toulon[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
+        expect(result_la_ciotat[:net_taxable_property_income_amount]).to be_within(0.01).of(0)
       end
 
       it "returns true if there is a negative taxable property income" do
@@ -299,6 +327,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:negative_taxable_property_income?]).to eq(false)
         expect(result_bordeaux[:negative_taxable_property_income?]).to eq(false)
         expect(result_nimes[:negative_taxable_property_income?]).to eq(false)
@@ -309,6 +339,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:negative_taxable_property_income?]).to eq(false)
         expect(result_rennes[:negative_taxable_property_income?]).to eq(false)
         expect(result_tours[:negative_taxable_property_income?]).to eq(false)
+        expect(result_toulon[:negative_taxable_property_income?]).to eq(false)
+        expect(result_la_ciotat[:negative_taxable_property_income?]).to eq(false)
       end
 
       it "returns the negative taxable property income amount postponed to the next fiscal year" do
@@ -322,6 +354,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_bordeaux[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_nimes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
@@ -332,6 +366,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_rennes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_toulon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+        expect(result_la_ciotat[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
       end
 
       it "returns the discount amount on income tax for low income household" do
@@ -345,6 +381,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
         expect(result_bordeaux[:discount_on_low_income_tax_amount]).to be_within(0.01).of(609.07)
         expect(result_nimes[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
@@ -355,6 +393,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
         expect(result_rennes[:discount_on_low_income_tax_amount]).to be_within(0.01).of(512.6)
         expect(result_tours[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_toulon[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
+        expect(result_la_ciotat[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
       end
 
       it "returns household's fiscal parts number" do
@@ -368,6 +408,8 @@ RSpec.describe FrenchTaxSystem do
         result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
         result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
         result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
         expect(result_lyon[:fiscal_nb_parts]).to eq(3.5)
         expect(result_bordeaux[:fiscal_nb_parts]).to eq(4)
         expect(result_nimes[:fiscal_nb_parts]).to eq(4.5)
@@ -378,6 +420,8 @@ RSpec.describe FrenchTaxSystem do
         expect(result_limoges[:fiscal_nb_parts]).to eq(4.5)
         expect(result_rennes[:fiscal_nb_parts]).to eq(4)
         expect(result_tours[:fiscal_nb_parts]).to eq(2)
+        expect(result_toulon[:fiscal_nb_parts]).to eq(4)
+        expect(result_la_ciotat[:fiscal_nb_parts]).to eq(2.5)
       end
     end
 
