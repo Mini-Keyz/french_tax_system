@@ -278,36 +278,36 @@ RSpec.describe FrenchTaxSystem do
   end
 
   describe "With property income" do
-    describe "#calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)" do
-      it "returns a nice array" do
-        result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "with_property_income", 10)
-        result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux, "with_property_income", 10)
-        result_nimes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_nimes, "with_property_income", 10)
-        result_lille = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lille, "with_property_income", 10)
-        result_agen = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_agen, "with_property_income", 10)
-        result_grenoble = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_grenoble, "with_property_income", 10)
-        result_toulouse = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulouse, "with_property_income", 10)
-        result_limoges = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_limoges, "with_property_income", 10)
-        result_rennes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_rennes, "with_property_income", 10)
-        result_tours = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_tours, "with_property_income", 10)
-        result_toulon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulon, "with_property_income", 10)
-        result_la_ciotat = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_la_ciotat, "with_property_income", 10)
-        # Results should not change between fiscal years because it is only based on fiscal_revenues_p1 & 2
-        expect(result_lyon).to be_a(Array)
-        expect(result_bordeaux).to be_a(Array)
-        expect(result_nimes).to be_a(Array)
-        expect(result_lille).to be_a(Array)
-        expect(result_agen).to be_a(Array)
-        expect(result_grenoble).to be_a(Array)
-        expect(result_toulouse).to be_a(Array)
-        expect(result_limoges).to be_a(Array)
-        expect(result_rennes).to be_a(Array)
-        expect(result_tours).to be_a(Array)
-        expect(result_toulon).to be_a(Array)
-        expect(result_la_ciotat).to be_a(Array)
-      end
+    context "when year 1" do
+      describe "#calc_taxes_amount_per_year(simulation, calculation_method, investment_top_fiscal_year)" do
+        it "returns a nice array" do
+          result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "with_property_income", 10)
+          result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux, "with_property_income", 10)
+          result_nimes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_nimes, "with_property_income", 10)
+          result_lille = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lille, "with_property_income", 10)
+          result_agen = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_agen, "with_property_income", 10)
+          result_grenoble = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_grenoble, "with_property_income", 10)
+          result_toulouse = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulouse, "with_property_income", 10)
+          result_limoges = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_limoges, "with_property_income", 10)
+          result_rennes = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_rennes, "with_property_income", 10)
+          result_tours = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_tours, "with_property_income", 10)
+          result_toulon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_toulon, "with_property_income", 10)
+          result_la_ciotat = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_la_ciotat, "with_property_income", 10)
+          # Results should not change between fiscal years because it is only based on fiscal_revenues_p1 & 2
+          expect(result_lyon).to be_a(Array)
+          expect(result_bordeaux).to be_a(Array)
+          expect(result_nimes).to be_a(Array)
+          expect(result_lille).to be_a(Array)
+          expect(result_agen).to be_a(Array)
+          expect(result_grenoble).to be_a(Array)
+          expect(result_toulouse).to be_a(Array)
+          expect(result_limoges).to be_a(Array)
+          expect(result_rennes).to be_a(Array)
+          expect(result_tours).to be_a(Array)
+          expect(result_toulon).to be_a(Array)
+          expect(result_la_ciotat).to be_a(Array)
+        end
 
-      context "when year 1" do
         it "returns income tax params" do
           result_lyon = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_lyon, "with_property_income", 10)
           result_bordeaux = FrenchTaxSystem.calc_taxes_amount_per_year(simulation_bordeaux, "with_property_income", 10)
@@ -362,64 +362,62 @@ RSpec.describe FrenchTaxSystem do
           expect(result_la_ciotat[0][:social_contributions_amount]).to be_within(0.01).of(1_506.4448)
         end
       end
-    end
 
-    describe "#calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-      it "returns a nice hash" do
-        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
-        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
-        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
-        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
-        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
-        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
-        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
-        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
-        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
-        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
-        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
-        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
-        expect(result_lyon).to be_a(Hash)
-        expect(result_bordeaux).to be_a(Hash)
-        expect(result_nimes).to be_a(Hash)
-        expect(result_lille).to be_a(Hash)
-        expect(result_agen).to be_a(Hash)
-        expect(result_grenoble).to be_a(Hash)
-        expect(result_toulouse).to be_a(Hash)
-        expect(result_limoges).to be_a(Hash)
-        expect(result_rennes).to be_a(Hash)
-        expect(result_tours).to be_a(Hash)
-        expect(result_toulon).to be_a(Hash)
-        expect(result_la_ciotat).to be_a(Hash)
-      end
+      describe "#calc_income_tax_amount_for_year(simulation, calculation_method, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+        it "returns a nice hash" do
+          result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+          result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+          result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+          result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+          result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+          result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+          result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+          result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+          result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+          result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+          result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+          result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
+          expect(result_lyon).to be_a(Hash)
+          expect(result_bordeaux).to be_a(Hash)
+          expect(result_nimes).to be_a(Hash)
+          expect(result_lille).to be_a(Hash)
+          expect(result_agen).to be_a(Hash)
+          expect(result_grenoble).to be_a(Hash)
+          expect(result_toulouse).to be_a(Hash)
+          expect(result_limoges).to be_a(Hash)
+          expect(result_rennes).to be_a(Hash)
+          expect(result_tours).to be_a(Hash)
+          expect(result_toulon).to be_a(Hash)
+          expect(result_la_ciotat).to be_a(Hash)
+        end
 
-      it "returns household's fiscal parts number" do
-        result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
-        result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
-        result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
-        result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
-        result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
-        result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
-        result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
-        result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
-        result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
-        result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
-        result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
-        result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
-        expect(result_lyon[:fiscal_nb_parts]).to eq(3.5)
-        expect(result_bordeaux[:fiscal_nb_parts]).to eq(4)
-        expect(result_nimes[:fiscal_nb_parts]).to eq(4.5)
-        expect(result_lille[:fiscal_nb_parts]).to eq(3)
-        expect(result_agen[:fiscal_nb_parts]).to eq(4)
-        expect(result_grenoble[:fiscal_nb_parts]).to eq(1)
-        expect(result_toulouse[:fiscal_nb_parts]).to eq(2.5)
-        expect(result_limoges[:fiscal_nb_parts]).to eq(4.5)
-        expect(result_rennes[:fiscal_nb_parts]).to eq(4)
-        expect(result_tours[:fiscal_nb_parts]).to eq(2)
-        expect(result_toulon[:fiscal_nb_parts]).to eq(4)
-        expect(result_la_ciotat[:fiscal_nb_parts]).to eq(2.5)
-      end
+        it "returns household's fiscal parts number" do
+          result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "without_property_income", 0, 1)
+          result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "without_property_income", 0, 2)
+          result_nimes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_nimes, "without_property_income", 0, 3)
+          result_lille = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lille, "without_property_income", 0, 4)
+          result_agen = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_agen, "without_property_income", 0, 5)
+          result_grenoble = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_grenoble, "without_property_income", 0, 6)
+          result_toulouse = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulouse, "without_property_income", 0, 7)
+          result_limoges = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_limoges, "without_property_income", 0, 8)
+          result_rennes = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_rennes, "without_property_income", 0, 9)
+          result_tours = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_tours, "without_property_income", 0, 10)
+          result_toulon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_toulon, "without_property_income", 0, 11)
+          result_la_ciotat = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_la_ciotat, "without_property_income", 0, 12)
+          expect(result_lyon[:fiscal_nb_parts]).to eq(3.5)
+          expect(result_bordeaux[:fiscal_nb_parts]).to eq(4)
+          expect(result_nimes[:fiscal_nb_parts]).to eq(4.5)
+          expect(result_lille[:fiscal_nb_parts]).to eq(3)
+          expect(result_agen[:fiscal_nb_parts]).to eq(4)
+          expect(result_grenoble[:fiscal_nb_parts]).to eq(1)
+          expect(result_toulouse[:fiscal_nb_parts]).to eq(2.5)
+          expect(result_limoges[:fiscal_nb_parts]).to eq(4.5)
+          expect(result_rennes[:fiscal_nb_parts]).to eq(4)
+          expect(result_tours[:fiscal_nb_parts]).to eq(2)
+          expect(result_toulon[:fiscal_nb_parts]).to eq(4)
+          expect(result_la_ciotat[:fiscal_nb_parts]).to eq(2.5)
+        end
 
-      context "when year 1" do
         it "returns the income tax" do
           result_lyon = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_lyon, "with_property_income", 0, 1)
           result_bordeaux = FrenchTaxSystem.calc_income_tax_amount_for_year(simulation_bordeaux, "with_property_income", 0, 1)
@@ -609,217 +607,308 @@ RSpec.describe FrenchTaxSystem do
           expect(result_la_ciotat[:discount_on_low_income_tax_amount]).to be_within(0.01).of(0)
         end
       end
-    end
 
-    describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
-      it "returns the net taxable amount" do
-        result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, -10_700.00)
-        result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, -739.08)
-        result_nimes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_nimes, -10_700.00)
-        result_lille = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lille, 2_705.34)
-        result_agen = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_agen, 18_630.08)
-        result_grenoble = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_grenoble, 387.60)
-        result_toulouse = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulouse, 3_470.28)
-        result_limoges = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_limoges, -6_969.20)
-        result_rennes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_rennes, -10_700.00)
-        result_tours = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_tours, -9_529.44)
-        result_toulon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulon, 20_815.20)
-        result_la_ciotat = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_la_ciotat, 8_758.40)
-        expect(result_lyon).to be_within(0.01).of(79_300.00)
-        expect(result_bordeaux).to be_within(0.01).of(53_260.92)
-        expect(result_nimes).to be_within(0.01).of(119_800.00)
-        expect(result_lille).to be_within(0.01).of(52_205.34)
-        expect(result_agen).to be_within(0.01).of(118_630.08)
-        expect(result_grenoble).to be_within(0.01).of(31_887.60)
-        expect(result_toulouse).to be_within(0.01).of(25_970.28)
-        expect(result_limoges).to be_within(0.01).of(173_030.80)
-        expect(result_rennes).to be_within(0.01).of(34_300.00)
-        expect(result_tours).to be_within(0.01).of(64_720.56)
-        expect(result_toulon).to be_within(0.01).of(313_315.20)
-        expect(result_la_ciotat).to be_within(0.01).of(175_258.40)
-      end
-    end
-
-    describe "#calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)" do
-      context "for real fiscal parts" do
-        it "returns the family quotient amount" do
-          result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 3.5)
-          result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(53_260.92, 4)
-          result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 4.5)
-          result_lille = FrenchTaxSystem.calc_family_quotient_amount(52_205.34, 3)
-          result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 4)
-          result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_887.60, 1)
-          result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 2.5)
-          result_limoges = FrenchTaxSystem.calc_family_quotient_amount(173_030.80, 4.5)
-          result_rennes = FrenchTaxSystem.calc_family_quotient_amount(34_300.00, 4)
-          result_tours = FrenchTaxSystem.calc_family_quotient_amount(64_720.56, 2)
-          result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 4)
-          result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2.5)
-          expect(result_lyon).to be_within(0.01).of(22_657.14)
-          expect(result_bordeaux).to be_within(0.01).of(13_315.23)
-          expect(result_nimes).to be_within(0.01).of(26_622.22)
-          expect(result_lille).to be_within(0.01).of(17_401.78)
-          expect(result_agen).to be_within(0.01).of(29_657.52)
-          expect(result_grenoble).to be_within(0.01).of(31_887.60)
-          expect(result_toulouse).to be_within(0.01).of(10_388.11)
-          expect(result_limoges).to be_within(0.01).of(38_451.29)
-          expect(result_rennes).to be_within(0.01).of(8_575.00)
-          expect(result_tours).to be_within(0.01).of(32_360.28)
-          expect(result_toulon).to be_within(0.01).of(78_328.80)
-          expect(result_la_ciotat).to be_within(0.01).of(70_103.36)
-        end
-      end
-
-      context "for fiscal parts capping" do
-        it "returns the family quotient amount" do
-          result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 2)
-          result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(53_260.92, 2)
-          result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 2)
-          result_lille = FrenchTaxSystem.calc_family_quotient_amount(52_205.34, 1)
-          result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 2)
-          result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_887.60, 1)
-          result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 1)
-          result_limoges = FrenchTaxSystem.calc_family_quotient_amount(173_030.80, 2)
-          result_rennes = FrenchTaxSystem.calc_family_quotient_amount(34_300.00, 1)
-          result_tours = FrenchTaxSystem.calc_family_quotient_amount(64_720.56, 2)
-          result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 2)
-          result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2)
-          expect(result_lyon).to be_within(0.01).of(39_650.00)
-          expect(result_bordeaux).to be_within(0.01).of(26_630.46)
-          expect(result_nimes).to be_within(0.01).of(59_900.00)
+      describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
+        it "returns the net taxable amount" do
+          result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, -10_700.00)
+          result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, -739.08)
+          result_nimes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_nimes, -10_700.00)
+          result_lille = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lille, 2_705.34)
+          result_agen = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_agen, 18_630.08)
+          result_grenoble = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_grenoble, 387.60)
+          result_toulouse = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulouse, 3_470.28)
+          result_limoges = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_limoges, -6_969.20)
+          result_rennes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_rennes, -10_700.00)
+          result_tours = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_tours, -9_529.44)
+          result_toulon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulon, 20_815.20)
+          result_la_ciotat = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_la_ciotat, 8_758.40)
+          expect(result_lyon).to be_within(0.01).of(79_300.00)
+          expect(result_bordeaux).to be_within(0.01).of(53_260.92)
+          expect(result_nimes).to be_within(0.01).of(119_800.00)
           expect(result_lille).to be_within(0.01).of(52_205.34)
-          expect(result_agen).to be_within(0.01).of(59_315.04)
+          expect(result_agen).to be_within(0.01).of(118_630.08)
           expect(result_grenoble).to be_within(0.01).of(31_887.60)
           expect(result_toulouse).to be_within(0.01).of(25_970.28)
-          expect(result_limoges).to be_within(0.01).of(86_515.40)
+          expect(result_limoges).to be_within(0.01).of(173_030.80)
           expect(result_rennes).to be_within(0.01).of(34_300.00)
-          expect(result_tours).to be_within(0.01).of(32_360.28)
-          expect(result_toulon).to be_within(0.01).of(156_657.60)
-          expect(result_la_ciotat).to be_within(0.01).of(87_629.20)
+          expect(result_tours).to be_within(0.01).of(64_720.56)
+          expect(result_toulon).to be_within(0.01).of(313_315.20)
+          expect(result_la_ciotat).to be_within(0.01).of(175_258.40)
         end
       end
-    end
 
-    describe "#calc_aggregated_tax_amount(family_quotient_amount, current_year)" do
-      context "for real fiscal parts" do
-        it "returns the aggregated tax amount" do
-          current_year = Date.today.year
-          # OK for params, finish expect
-          result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(22_657.14, current_year)
-          result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(13_315.23, current_year)
-          result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(26_622.22, current_year)
-          result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(17_401.78, current_year)
-          result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(29_657.52, current_year)
-          result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_887.60, current_year)
-          result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(10_388.11, current_year)
-          result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(38_451.29, current_year)
-          result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(8_575.00, current_year)
-          result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(32_360.28, current_year)
-          result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(78_328.80, current_year)
-          result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(70_103.36, current_year)
-          expect(result_lyon).to be_within(0.01).of(1_382.9354)
-          expect(result_bordeaux).to be_within(0.01).of(355.3253)
-          expect(result_nimes).to be_within(0.01).of(1_992.116)
-          expect(result_lille).to be_within(0.01).of(804.8458)
-          expect(result_agen).to be_within(0.01).of(2_902.706)
+      describe "#calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)" do
+        context "for real fiscal parts" do
+          it "returns the family quotient amount" do
+            result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 3.5)
+            result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(53_260.92, 4)
+            result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 4.5)
+            result_lille = FrenchTaxSystem.calc_family_quotient_amount(52_205.34, 3)
+            result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 4)
+            result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_887.60, 1)
+            result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 2.5)
+            result_limoges = FrenchTaxSystem.calc_family_quotient_amount(173_030.80, 4.5)
+            result_rennes = FrenchTaxSystem.calc_family_quotient_amount(34_300.00, 4)
+            result_tours = FrenchTaxSystem.calc_family_quotient_amount(64_720.56, 2)
+            result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 4)
+            result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2.5)
+            expect(result_lyon).to be_within(0.01).of(22_657.14)
+            expect(result_bordeaux).to be_within(0.01).of(13_315.23)
+            expect(result_nimes).to be_within(0.01).of(26_622.22)
+            expect(result_lille).to be_within(0.01).of(17_401.78)
+            expect(result_agen).to be_within(0.01).of(29_657.52)
+            expect(result_grenoble).to be_within(0.01).of(31_887.60)
+            expect(result_toulouse).to be_within(0.01).of(10_388.11)
+            expect(result_limoges).to be_within(0.01).of(38_451.29)
+            expect(result_rennes).to be_within(0.01).of(8_575.00)
+            expect(result_tours).to be_within(0.01).of(32_360.28)
+            expect(result_toulon).to be_within(0.01).of(78_328.80)
+            expect(result_la_ciotat).to be_within(0.01).of(70_103.36)
+          end
+        end
+
+        context "for fiscal parts capping" do
+          it "returns the family quotient amount" do
+            result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 2)
+            result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(53_260.92, 2)
+            result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 2)
+            result_lille = FrenchTaxSystem.calc_family_quotient_amount(52_205.34, 1)
+            result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 2)
+            result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(31_887.60, 1)
+            result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 1)
+            result_limoges = FrenchTaxSystem.calc_family_quotient_amount(173_030.80, 2)
+            result_rennes = FrenchTaxSystem.calc_family_quotient_amount(34_300.00, 1)
+            result_tours = FrenchTaxSystem.calc_family_quotient_amount(64_720.56, 2)
+            result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 2)
+            result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2)
+            expect(result_lyon).to be_within(0.01).of(39_650.00)
+            expect(result_bordeaux).to be_within(0.01).of(26_630.46)
+            expect(result_nimes).to be_within(0.01).of(59_900.00)
+            expect(result_lille).to be_within(0.01).of(52_205.34)
+            expect(result_agen).to be_within(0.01).of(59_315.04)
+            expect(result_grenoble).to be_within(0.01).of(31_887.60)
+            expect(result_toulouse).to be_within(0.01).of(25_970.28)
+            expect(result_limoges).to be_within(0.01).of(86_515.40)
+            expect(result_rennes).to be_within(0.01).of(34_300.00)
+            expect(result_tours).to be_within(0.01).of(32_360.28)
+            expect(result_toulon).to be_within(0.01).of(156_657.60)
+            expect(result_la_ciotat).to be_within(0.01).of(87_629.20)
+          end
+        end
+      end
+
+      describe "#calc_aggregated_tax_amount(family_quotient_amount, current_year)" do
+        context "for real fiscal parts" do
+          it "returns the aggregated tax amount" do
+            current_year = Date.today.year
+            # OK for params, finish expect
+            result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(22_657.14, current_year)
+            result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(13_315.23, current_year)
+            result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(26_622.22, current_year)
+            result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(17_401.78, current_year)
+            result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(29_657.52, current_year)
+            result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_887.60, current_year)
+            result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(10_388.11, current_year)
+            result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(38_451.29, current_year)
+            result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(8_575.00, current_year)
+            result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(32_360.28, current_year)
+            result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(78_328.80, current_year)
+            result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(70_103.36, current_year)
+            expect(result_lyon).to be_within(0.01).of(1_382.9354)
+            expect(result_bordeaux).to be_within(0.01).of(355.3253)
+            expect(result_nimes).to be_within(0.01).of(1_992.116)
+            expect(result_lille).to be_within(0.01).of(804.8458)
+            expect(result_agen).to be_within(0.01).of(2_902.706)
+            expect(result_grenoble).to be_within(0.01).of(3_571.73)
+            expect(result_toulouse).to be_within(0.01).of(33.3421)
+            expect(result_limoges).to be_within(0.01).of(5_540.837)
+            expect(result_rennes).to be_within(0.01).of(0)
+            expect(result_tours).to be_within(0.01).of(3_713.534)
+            expect(result_toulon).to be_within(0.01).of(18_033.088)
+            expect(result_la_ciotat).to be_within(0.01).of(15_036.458)
+          end
+        end
+
+        context "for fiscal parts capping" do
+          it "returns the aggregated tax amount" do
+            current_year = Date.today.year
+            result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(39_650.00, current_year)
+            result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(26_630.46, current_year)
+            result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(59_900.00, current_year)
+            result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(52_205.34, current_year)
+            result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(59_315.04, current_year)
+            result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_887.60, current_year)
+            result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(25_970.28, current_year)
+            result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(86_515.40, current_year)
+            result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(34_300.00, current_year)
+            result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(32_360.28, current_year)
+            result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(156_657.60, current_year)
+            result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(87_629.20, current_year)
+            expect(result_lyon).to be_within(0.01).of(5_900.45)
+            expect(result_bordeaux).to be_within(0.01).of(1_994.588)
+            expect(result_nimes).to be_within(0.01).of(11_975.45)
+            expect(result_lille).to be_within(0.01).of(9_667.052)
+            expect(result_agen).to be_within(0.01).of(11_799.962)
+            expect(result_grenoble).to be_within(0.01).of(3_571.73)
+            expect(result_toulouse).to be_within(0.01).of(1_796.534)
+            expect(result_limoges).to be_within(0.01).of(21_389.594)
+            expect(result_rennes).to be_within(0.01).of(4_295.45)
+            expect(result_tours).to be_within(0.01).of(3_713.534)
+            expect(result_toulon).to be_within(0.01).of(50_147.896)
+            expect(result_la_ciotat).to be_within(0.01).of(21_846.252)
+          end
+        end
+      end
+
+      describe "#apply_fiscal_parts_capping(aggregated_tax_amount_for_real_fiscal_parts, fiscal_nb_parts, aggregated_tax_amount_for_fiscal_parts_capping, fiscal_nb_parts_for_capping, capping_due_to_fiscal_parts)" do
+        it "returns previsional income tax with fiscal part capping effect" do
+          result_lyon = FrenchTaxSystem.apply_fiscal_parts_capping(1_382.9354, 3.5, 5_900.45, 2, 4_710)
+          result_bordeaux = FrenchTaxSystem.apply_fiscal_parts_capping(355.3253, 4, 1_994.588, 2, 6_280)
+          result_nimes = FrenchTaxSystem.apply_fiscal_parts_capping(1_992.116, 4.5, 11_975.45, 2, 7_850)
+          result_lille = FrenchTaxSystem.apply_fiscal_parts_capping(804.8458, 3, 9_667.052, 1, 6_844)
+          result_agen = FrenchTaxSystem.apply_fiscal_parts_capping(2_902.706, 4, 11_799.962, 2, 6_280)
+          result_grenoble = FrenchTaxSystem.apply_fiscal_parts_capping(3_571.73, 1, 3_571.73, 1, 0)
+          result_toulouse = FrenchTaxSystem.apply_fiscal_parts_capping(33.3421, 2.5, 1_796.534, 1, 5_274)
+          result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(5_540.837, 4.5, 21_389.594, 2, 7_850)
+          result_rennes = FrenchTaxSystem.apply_fiscal_parts_capping(0, 4, 4_295.45, 1, 9_984)
+          result_tours = FrenchTaxSystem.apply_fiscal_parts_capping(3_713.534, 2, 3_713.534, 2, 0)
+          result_toulon = FrenchTaxSystem.apply_fiscal_parts_capping(18_033.088, 4, 50_147.896, 2, 6_280)
+          result_la_ciotat = FrenchTaxSystem.apply_fiscal_parts_capping(15_036.458, 2.5, 21_846.252, 2, 1_570)
+          expect(result_lyon).to be_within(0.01).of(7_090.90)
+          expect(result_bordeaux).to be_within(0.01).of(1_421.30)
+          expect(result_nimes).to be_within(0.01).of(16_100.90)
+          expect(result_lille).to be_within(0.01).of(2_823.05)
+          expect(result_agen).to be_within(0.01).of(17_319.92)
           expect(result_grenoble).to be_within(0.01).of(3_571.73)
-          expect(result_toulouse).to be_within(0.01).of(33.3421)
-          expect(result_limoges).to be_within(0.01).of(5_540.837)
+          expect(result_toulouse).to be_within(0.01).of(83.36)
+          expect(result_limoges).to be_within(0.01).of(34_929.19)
+          expect(result_rennes).to be_within(0.01).of(0.00)
+          expect(result_tours).to be_within(0.01).of(7_427.07)
+          expect(result_toulon).to be_within(0.01).of(94_015.79)
+          expect(result_la_ciotat).to be_within(0.01).of(42_122.50)
+        end
+      end
+
+      describe "#apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)" do
+        it "returns final tax income with the reduced income tax for low incomes" do
+          current_year = Date.today.year
+
+          result_lyon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lyon, 7_090.90, current_year)
+          result_bordeaux = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_bordeaux, 1_421.30, current_year)
+          result_nimes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_nimes, 16_100.90, current_year)
+          result_lille = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lille, 2_823.05, current_year)
+          result_agen = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_agen, 17_319.92, current_year)
+          result_grenoble = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_grenoble, 3_571.73, current_year)
+          result_toulouse = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulouse, 83.36, current_year)
+          result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 34_929.19, current_year)
+          result_rennes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_rennes, 0.00, current_year)
+          result_tours = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_tours, 7_427.07, current_year)
+          result_toulon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulon, 94_015.79, current_year)
+          result_la_ciotat = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_la_ciotat, 42_122.50, current_year)
+          expect(result_lyon).to be_within(0.01).of(7_090.90)
+          expect(result_bordeaux).to be_within(0.01).of(775.43825) # Married couple household effect
+          expect(result_nimes).to be_within(0.01).of(16_100.90)
+          expect(result_lille).to be_within(0.01).of(2_823.05)
+          expect(result_agen).to be_within(0.01).of(17_319.92)
+          expect(result_grenoble).to be_within(0.01).of(3_571.73)
+          expect(result_toulouse).to be_within(0.01).of(0) # Single person household effect
+          expect(result_limoges).to be_within(0.01).of(34_929.19)
           expect(result_rennes).to be_within(0.01).of(0)
-          expect(result_tours).to be_within(0.01).of(3_713.534)
-          expect(result_toulon).to be_within(0.01).of(18_033.088)
-          expect(result_la_ciotat).to be_within(0.01).of(15_036.458)
-        end
-      end
-
-      context "for fiscal parts capping" do
-        it "returns the aggregated tax amount" do
-          current_year = Date.today.year
-          result_lyon = FrenchTaxSystem.calc_aggregated_tax_amount(39_650.00, current_year)
-          result_bordeaux = FrenchTaxSystem.calc_aggregated_tax_amount(26_630.46, current_year)
-          result_nimes = FrenchTaxSystem.calc_aggregated_tax_amount(59_900.00, current_year)
-          result_lille = FrenchTaxSystem.calc_aggregated_tax_amount(52_205.34, current_year)
-          result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(59_315.04, current_year)
-          result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(31_887.60, current_year)
-          result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(25_970.28, current_year)
-          result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(86_515.40, current_year)
-          result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(34_300.00, current_year)
-          result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(32_360.28, current_year)
-          result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(156_657.60, current_year)
-          result_la_ciotat = FrenchTaxSystem.calc_aggregated_tax_amount(87_629.20, current_year)
-          expect(result_lyon).to be_within(0.01).of(5_900.45)
-          expect(result_bordeaux).to be_within(0.01).of(1_994.588)
-          expect(result_nimes).to be_within(0.01).of(11_975.45)
-          expect(result_lille).to be_within(0.01).of(9_667.052)
-          expect(result_agen).to be_within(0.01).of(11_799.962)
-          expect(result_grenoble).to be_within(0.01).of(3_571.73)
-          expect(result_toulouse).to be_within(0.01).of(1_796.534)
-          expect(result_limoges).to be_within(0.01).of(21_389.594)
-          expect(result_rennes).to be_within(0.01).of(4_295.45)
-          expect(result_tours).to be_within(0.01).of(3_713.534)
-          expect(result_toulon).to be_within(0.01).of(50_147.896)
-          expect(result_la_ciotat).to be_within(0.01).of(21_846.252)
+          expect(result_tours).to be_within(0.01).of(7_427.07)
+          expect(result_toulon).to be_within(0.01).of(94_015.79)
+          expect(result_la_ciotat).to be_within(0.01).of(42_122.50)
         end
       end
     end
 
-    describe "#apply_fiscal_parts_capping(aggregated_tax_amount_for_real_fiscal_parts, fiscal_nb_parts, aggregated_tax_amount_for_fiscal_parts_capping, fiscal_nb_parts_for_capping, capping_due_to_fiscal_parts)" do
-      it "returns previsional income tax with fiscal part capping effect" do
-        result_lyon = FrenchTaxSystem.apply_fiscal_parts_capping(1_382.9354, 3.5, 5_900.45, 2, 4_710)
-        result_bordeaux = FrenchTaxSystem.apply_fiscal_parts_capping(355.3253, 4, 1_994.588, 2, 6_280)
-        result_nimes = FrenchTaxSystem.apply_fiscal_parts_capping(1_992.116, 4.5, 11_975.45, 2, 7_850)
-        result_lille = FrenchTaxSystem.apply_fiscal_parts_capping(804.8458, 3, 9_667.052, 1, 6_844)
-        result_agen = FrenchTaxSystem.apply_fiscal_parts_capping(2_902.706, 4, 11_799.962, 2, 6_280)
-        result_grenoble = FrenchTaxSystem.apply_fiscal_parts_capping(3_571.73, 1, 3_571.73, 1, 0)
-        result_toulouse = FrenchTaxSystem.apply_fiscal_parts_capping(33.3421, 2.5, 1_796.534, 1, 5_274)
-        result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(5_540.837, 4.5, 21_389.594, 2, 7_850)
-        result_rennes = FrenchTaxSystem.apply_fiscal_parts_capping(0, 4, 4_295.45, 1, 9_984)
-        result_tours = FrenchTaxSystem.apply_fiscal_parts_capping(3_713.534, 2, 3_713.534, 2, 0)
-        result_toulon = FrenchTaxSystem.apply_fiscal_parts_capping(18_033.088, 4, 50_147.896, 2, 6_280)
-        result_la_ciotat = FrenchTaxSystem.apply_fiscal_parts_capping(15_036.458, 2.5, 21_846.252, 2, 1_570)
-        expect(result_lyon).to be_within(0.01).of(7_090.90)
-        expect(result_bordeaux).to be_within(0.01).of(1_421.30)
-        expect(result_nimes).to be_within(0.01).of(16_100.90)
-        expect(result_lille).to be_within(0.01).of(2_823.05)
-        expect(result_agen).to be_within(0.01).of(17_319.92)
-        expect(result_grenoble).to be_within(0.01).of(3_571.73)
-        expect(result_toulouse).to be_within(0.01).of(83.36)
-        expect(result_limoges).to be_within(0.01).of(34_929.19)
-        expect(result_rennes).to be_within(0.01).of(0.00)
-        expect(result_tours).to be_within(0.01).of(7_427.07)
-        expect(result_toulon).to be_within(0.01).of(94_015.79)
-        expect(result_la_ciotat).to be_within(0.01).of(42_122.50)
+    context "when year 2" do
+      describe "#calc_global_net_taxable_amount(simulation, net_taxable_property_income)" do
+        it "returns the net taxable amount" do
+          result_lyon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lyon, -10_700.00) # Same as year 1
+          result_bordeaux = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_bordeaux, 4_260.92)
+          result_nimes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_nimes, -10_700.00) # Same as year 1
+          result_lille = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_lille, 5_205.34)
+          result_agen = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_agen, 18_630.08) # Same as year 1
+          result_grenoble = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_grenoble, 10_387.60)
+          result_toulouse = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulouse, 3_470.28) # Same as year 1
+          result_limoges = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_limoges, 18_030.80)
+          result_rennes = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_rennes, -4_272.34)
+          result_tours = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_tours, 15_470.56)
+          result_toulon = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_toulon, 20_815.20) # Same as year 1
+          result_la_ciotat = FrenchTaxSystem.calc_global_net_taxable_amount(simulation_la_ciotat, 8_758.40) # Same as year 1
+          expect(result_lyon).to be_within(0.01).of(79_300.00) # Same as year 1
+          expect(result_bordeaux).to be_within(0.01).of(58_260.92)
+          expect(result_nimes).to be_within(0.01).of(119_800.00) # Same as year 1
+          expect(result_lille).to be_within(0.01).of(54_705.34)
+          expect(result_agen).to be_within(0.01).of(118_630.08) # Same as year 1
+          expect(result_grenoble).to be_within(0.01).of(41_887.60)
+          expect(result_toulouse).to be_within(0.01).of(25_970.28) # Same as year 1
+          expect(result_limoges).to be_within(0.01).of(198_030.80)
+          expect(result_rennes).to be_within(0.01).of(40_727.66)
+          expect(result_tours).to be_within(0.01).of(89_720.56)
+          expect(result_toulon).to be_within(0.01).of(313_315.20) # Same as year 1
+          expect(result_la_ciotat).to be_within(0.01).of(175_258.40) # Same as year 1
+        end
       end
-    end
 
-    describe "#apply_discount_on_low_income_tax(simulation, almost_final_income_tax, current_year)" do
-      it "returns final tax income with the reduced income tax for low incomes" do
-        current_year = Date.today.year
+      describe "#calc_family_quotient_amount(global_net_taxable_income_amount, fiscal_nb_parts)" do
+        context "for real fiscal parts" do
+          it "returns the family quotient amount" do
+            result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 3.5)
+            result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(58_260.92, 4)
+            result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 4.5)
+            result_lille = FrenchTaxSystem.calc_family_quotient_amount(54_705.34, 3)
+            result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 4)
+            result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(41_887.60, 1)
+            result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 2.5)
+            result_limoges = FrenchTaxSystem.calc_family_quotient_amount(198_030.80, 4.5)
+            result_rennes = FrenchTaxSystem.calc_family_quotient_amount(40_727.66, 4)
+            result_tours = FrenchTaxSystem.calc_family_quotient_amount(89_720.56, 2)
+            result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 4)
+            result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2.5)
+            expect(result_lyon).to be_within(0.01).of(22_657.14)
+            expect(result_bordeaux).to be_within(0.01).of(14_565.23)
+            expect(result_nimes).to be_within(0.01).of(26_622.22)
+            expect(result_lille).to be_within(0.01).of(18_235.11)
+            expect(result_agen).to be_within(0.01).of(29_657.52)
+            expect(result_grenoble).to be_within(0.01).of(41_887.60)
+            expect(result_toulouse).to be_within(0.01).of(10_388.11)
+            expect(result_limoges).to be_within(0.01).of(44_006.84)
+            expect(result_rennes).to be_within(0.01).of(10_181.92)
+            expect(result_tours).to be_within(0.01).of(44_860.28)
+            expect(result_toulon).to be_within(0.01).of(78_328.80)
+            expect(result_la_ciotat).to be_within(0.01).of(70_103.36)
+          end
+        end
 
-        result_lyon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lyon, 7_090.90, current_year)
-        result_bordeaux = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_bordeaux, 1_421.30, current_year)
-        result_nimes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_nimes, 16_100.90, current_year)
-        result_lille = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_lille, 2_823.05, current_year)
-        result_agen = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_agen, 17_319.92, current_year)
-        result_grenoble = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_grenoble, 3_571.73, current_year)
-        result_toulouse = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulouse, 83.36, current_year)
-        result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 34_929.19, current_year)
-        result_rennes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_rennes, 0.00, current_year)
-        result_tours = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_tours, 7_427.07, current_year)
-        result_toulon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulon, 94_015.79, current_year)
-        result_la_ciotat = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_la_ciotat, 42_122.50, current_year)
-        expect(result_lyon).to be_within(0.01).of(7_090.90)
-        expect(result_bordeaux).to be_within(0.01).of(775.43825) # Married couple household effect
-        expect(result_nimes).to be_within(0.01).of(16_100.90)
-        expect(result_lille).to be_within(0.01).of(2_823.05)
-        expect(result_agen).to be_within(0.01).of(17_319.92)
-        expect(result_grenoble).to be_within(0.01).of(3_571.73)
-        expect(result_toulouse).to be_within(0.01).of(0) # Single person household effect
-        expect(result_limoges).to be_within(0.01).of(34_929.19)
-        expect(result_rennes).to be_within(0.01).of(0)
-        expect(result_tours).to be_within(0.01).of(7_427.07)
-        expect(result_toulon).to be_within(0.01).of(94_015.79)
-        expect(result_la_ciotat).to be_within(0.01).of(42_122.50)
+        context "for fiscal parts capping" do
+          it "returns the family quotient amount" do
+            result_lyon = FrenchTaxSystem.calc_family_quotient_amount(79_300.00, 2)
+            result_bordeaux = FrenchTaxSystem.calc_family_quotient_amount(58_260.92, 2)
+            result_nimes = FrenchTaxSystem.calc_family_quotient_amount(119_800.00, 2)
+            result_lille = FrenchTaxSystem.calc_family_quotient_amount(54_705.34, 1)
+            result_agen = FrenchTaxSystem.calc_family_quotient_amount(118_630.08, 2)
+            result_grenoble = FrenchTaxSystem.calc_family_quotient_amount(41_887.60, 1)
+            result_toulouse = FrenchTaxSystem.calc_family_quotient_amount(25_970.28, 1)
+            result_limoges = FrenchTaxSystem.calc_family_quotient_amount(198_030.80, 2)
+            result_rennes = FrenchTaxSystem.calc_family_quotient_amount(40_727.66, 1)
+            result_tours = FrenchTaxSystem.calc_family_quotient_amount(89_720.56, 2)
+            result_toulon = FrenchTaxSystem.calc_family_quotient_amount(313_315.20, 2)
+            result_la_ciotat = FrenchTaxSystem.calc_family_quotient_amount(175_258.40, 2)
+            expect(result_lyon).to be_within(0.01).of(39_650.00)
+            expect(result_bordeaux).to be_within(0.01).of(29_130.46)
+            expect(result_nimes).to be_within(0.01).of(59_900.00)
+            expect(result_lille).to be_within(0.01).of(54_705.34)
+            expect(result_agen).to be_within(0.01).of(59_315.04)
+            expect(result_grenoble).to be_within(0.01).of(41_887.60)
+            expect(result_toulouse).to be_within(0.01).of(25_970.28)
+            expect(result_limoges).to be_within(0.01).of(99_015.40)
+            expect(result_rennes).to be_within(0.01).of(40_727.66)
+            expect(result_tours).to be_within(0.01).of(44_860.28)
+            expect(result_toulon).to be_within(0.01).of(156_657.60)
+            expect(result_la_ciotat).to be_within(0.01).of(87_629.20)
+          end
+        end
       end
     end
   end
