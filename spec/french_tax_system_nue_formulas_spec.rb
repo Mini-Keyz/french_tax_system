@@ -871,7 +871,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_grenoble[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(6_571.73)
           expect(result_toulouse[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(0) # Same year 1
           puts result_limoges
-          expect(result_limoges[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(37_799.188)
+          expect(result_limoges[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(45_179.19)
           expect(result_rennes[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(0) # Income tax is less than 62 euros
           expect(result_tours[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(14_927.068)
           expect(result_toulon[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(94_015.79) # Same year 1
@@ -981,7 +981,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_agen[:income_tax_amount]).to be_within(0.01).of(17_319.92) # Same year 1
           expect(result_grenoble[:income_tax_amount]).to be_within(0.01).of(6_571.73)
           expect(result_toulouse[:income_tax_amount]).to be_within(0.01).of(0) # Same year 1
-          expect(result_limoges[:income_tax_amount]).to be_within(0.01).of(37_799.188)
+          expect(result_limoges[:income_tax_amount]).to be_within(0.01).of(45_179.19)
           expect(result_rennes[:income_tax_amount]).to be_within(0.01).of(0) # Income tax is less than 62 euros
           expect(result_tours[:income_tax_amount]).to be_within(0.01).of(14_927.068)
           expect(result_toulon[:income_tax_amount]).to be_within(0.01).of(94_015.79) # Same year 1
@@ -1008,7 +1008,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_agen[:average_tax_rate]).to be_within(0.001).of(0.1460) # Same year 1
           expect(result_grenoble[:average_tax_rate]).to be_within(0.001).of(0.1569)
           expect(result_toulouse[:average_tax_rate]).to be_within(0.001).of(0.0000) # Same year 1
-          expect(result_limoges[:average_tax_rate]).to be_within(0.001).of(0.1909)
+          expect(result_limoges[:average_tax_rate]).to be_within(0.001).of(0.2281)
           expect(result_rennes[:average_tax_rate]).to be_within(0.001).of(0.0000)
           expect(result_tours[:average_tax_rate]).to be_within(0.001).of(0.1664)
           expect(result_toulon[:average_tax_rate]).to be_within(0.001).of(0.3001) # Same year 1
@@ -1281,7 +1281,7 @@ RSpec.describe FrenchTaxSystem do
             result_agen = FrenchTaxSystem.calc_aggregated_tax_amount(59_315.04, current_year) # Same year 1
             result_grenoble = FrenchTaxSystem.calc_aggregated_tax_amount(41_887.60, current_year)
             result_toulouse = FrenchTaxSystem.calc_aggregated_tax_amount(25_970.28, current_year) # Same year 1
-            result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(90_015.40, current_year)
+            result_limoges = FrenchTaxSystem.calc_aggregated_tax_amount(99_015.40, current_year)
             result_rennes = FrenchTaxSystem.calc_aggregated_tax_amount(40_727.66, current_year)
             result_tours = FrenchTaxSystem.calc_aggregated_tax_amount(44_860.28, current_year)
             result_toulon = FrenchTaxSystem.calc_aggregated_tax_amount(156_657.60, current_year) # Same year 1
@@ -1293,7 +1293,7 @@ RSpec.describe FrenchTaxSystem do
             expect(result_agen).to be_within(0.01).of(11_799.962) # Same year 1
             expect(result_grenoble).to be_within(0.01).of(6_571.73)
             expect(result_toulouse).to be_within(0.01).of(1_796.534) # Same year 1
-            expect(result_limoges).to be_within(0.01).of(22_824.594)
+            expect(result_limoges).to be_within(0.01).of(26_514.594)
             expect(result_rennes).to be_within(0.01).of(6_223.748)
             expect(result_tours).to be_within(0.01).of(7_463.534)
             expect(result_toulon).to be_within(0.01).of(50_147.896) # Same year 1
@@ -1311,7 +1311,7 @@ RSpec.describe FrenchTaxSystem do
           result_agen = FrenchTaxSystem.apply_fiscal_parts_capping(2_902.706, 4, 11_799.962, 2, 6_280) # Same year 1
           result_grenoble = FrenchTaxSystem.apply_fiscal_parts_capping(6_571.73, 1, 6_571.73, 1, 0)
           result_toulouse = FrenchTaxSystem.apply_fiscal_parts_capping(33.3421, 2.5, 1_796.534, 1, 5_274) # Same year 1
-          result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(7_207.502, 4.5, 22_824.594, 2, 7_850)
+          result_limoges = FrenchTaxSystem.apply_fiscal_parts_capping(7_207.502, 4.5, 26_514.594, 2, 7_850)
           result_rennes = FrenchTaxSystem.apply_fiscal_parts_capping(10.6612, 4, 6_223.748, 1, 9_984)
           result_tours = FrenchTaxSystem.apply_fiscal_parts_capping(7_463.534, 2, 7_463.534, 2, 0)
           result_toulon = FrenchTaxSystem.apply_fiscal_parts_capping(18_033.088, 4, 50_147.896, 2, 6_280) # Same year 1
@@ -1323,7 +1323,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_agen).to be_within(0.01).of(17_319.92) # Same year 1
           expect(result_grenoble).to be_within(0.01).of(6_571.73)
           expect(result_toulouse).to be_within(0.01).of(83.36) # Same year 1
-          expect(result_limoges).to be_within(0.01).of(37_799.19)
+          expect(result_limoges).to be_within(0.01).of(45_179.19)
           expect(result_rennes).to be_within(0.01).of(42.64)
           expect(result_tours).to be_within(0.01).of(14_927.07)
           expect(result_toulon).to be_within(0.01).of(94_015.79) # Same year 1
@@ -1342,7 +1342,7 @@ RSpec.describe FrenchTaxSystem do
           result_agen = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_agen, 17_319.92, current_year) # Same year 1
           result_grenoble = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_grenoble, 6_571.73, current_year)
           result_toulouse = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulouse, 83.36, current_year) # Same year 1
-          result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 37_799.19, current_year)
+          result_limoges = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_limoges, 45_179.19, current_year)
           result_rennes = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_rennes, 42.64, current_year)
           result_tours = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_tours, 14_927.07, current_year)
           result_toulon = FrenchTaxSystem.apply_discount_on_low_income_tax(simulation_toulon, 94_015.79, current_year) # Same year 1
@@ -1354,7 +1354,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_agen).to be_within(0.01).of(17_319.92) # Same year 1
           expect(result_grenoble).to be_within(0.01).of(6_571.73)
           expect(result_toulouse).to be_within(0.01).of(0) # Same year 1
-          expect(result_limoges).to be_within(0.01).of(37_799.19)
+          expect(result_limoges).to be_within(0.01).of(45_179.19)
           expect(result_rennes).to be_within(0.01).of(0) # Single person household effect
           expect(result_tours).to be_within(0.01).of(14_927.07)
           expect(result_toulon).to be_within(0.01).of(94_015.79) # Same year 1
