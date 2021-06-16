@@ -217,57 +217,57 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
   end
 
   describe "For 'Reel' fiscal regimen" do
-    describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-      it "returns a nice hash" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 1)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_bordeaux, 0, 1)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_nimes, 0, 1)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lille, 0, 1)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_agen, 0, 1)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_grenoble, 0, 1)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulouse, 0, 1)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_limoges, 0, 1)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_rennes, 0, 1)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_tours, 0, 1)
-        expect(result_lyon).to be_a(Hash)
-        expect(result_bordeaux).to be_a(Hash)
-        expect(result_nimes).to be_a(Hash)
-        expect(result_lille).to be_a(Hash)
-        expect(result_agen).to be_a(Hash)
-        expect(result_grenoble).to be_a(Hash)
-        expect(result_toulouse).to be_a(Hash)
-        expect(result_limoges).to be_a(Hash)
-        expect(result_rennes).to be_a(Hash)
-        expect(result_tours).to be_a(Hash)
-      end
-    end
-
-    describe "#calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
-      it "returns a nice hash" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 0, 1)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 1)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_nimes, 0, 1)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 1)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 1)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 1)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 1)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_limoges, 0, 1)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_rennes, 0, 1)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_tours, 0, 1)
-        expect(result_lyon).to be_a(Hash)
-        expect(result_bordeaux).to be_a(Hash)
-        expect(result_nimes).to be_a(Hash)
-        expect(result_lille).to be_a(Hash)
-        expect(result_agen).to be_a(Hash)
-        expect(result_grenoble).to be_a(Hash)
-        expect(result_toulouse).to be_a(Hash)
-        expect(result_limoges).to be_a(Hash)
-        expect(result_rennes).to be_a(Hash)
-        expect(result_tours).to be_a(Hash)
+    context "when year 1" do
+      describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+        it "returns a nice hash" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 1)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_bordeaux, 0, 1)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_nimes, 0, 1)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lille, 0, 1)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_agen, 0, 1)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_grenoble, 0, 1)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulouse, 0, 1)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_limoges, 0, 1)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_rennes, 0, 1)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_tours, 0, 1)
+          expect(result_lyon).to be_a(Hash)
+          expect(result_bordeaux).to be_a(Hash)
+          expect(result_nimes).to be_a(Hash)
+          expect(result_lille).to be_a(Hash)
+          expect(result_agen).to be_a(Hash)
+          expect(result_grenoble).to be_a(Hash)
+          expect(result_toulouse).to be_a(Hash)
+          expect(result_limoges).to be_a(Hash)
+          expect(result_rennes).to be_a(Hash)
+          expect(result_tours).to be_a(Hash)
+        end
       end
 
-      context "when positive on year 1" do
-        context "when year 1" do
+      describe "#calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+        it "returns a nice hash" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 0, 1)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 1)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_nimes, 0, 1)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 1)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 1)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 1)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 1)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_limoges, 0, 1)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_rennes, 0, 1)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_tours, 0, 1)
+          expect(result_lyon).to be_a(Hash)
+          expect(result_bordeaux).to be_a(Hash)
+          expect(result_nimes).to be_a(Hash)
+          expect(result_lille).to be_a(Hash)
+          expect(result_agen).to be_a(Hash)
+          expect(result_grenoble).to be_a(Hash)
+          expect(result_toulouse).to be_a(Hash)
+          expect(result_limoges).to be_a(Hash)
+          expect(result_rennes).to be_a(Hash)
+          expect(result_tours).to be_a(Hash)
+        end
+
+        context "when positive on year 1" do
           it "returns the net taxable property income amount" do
             result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 1)
             result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 1)
@@ -302,44 +302,7 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
           end
         end
 
-        context "when year 2" do
-          it "returns the net taxable property income amount" do
-            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
-            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
-            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
-            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
-            expect(result_lille[:net_taxable_property_income_amount]).to be_within(0.01).of(5_205.34)
-            expect(result_agen[:net_taxable_property_income_amount]).to be_within(0.01).of(18_630.08)
-            expect(result_grenoble[:net_taxable_property_income_amount]).to be_within(0.01).of(10_387.60)
-            expect(result_toulouse[:net_taxable_property_income_amount]).to be_within(0.01).of(3_470.28)
-          end
-
-          it "returns false for negative_net_taxable_income_amount? key" do
-            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
-            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
-            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
-            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
-            expect(result_lille[:negative_taxable_property_income?]).to eq(false)
-            expect(result_agen[:negative_taxable_property_income?]).to eq(false)
-            expect(result_grenoble[:negative_taxable_property_income?]).to eq(false)
-            expect(result_toulouse[:negative_taxable_property_income?]).to eq(false)
-          end
-
-          it "returns the negative net taxable income amount to postpone to the next fiscal year" do
-            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
-            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
-            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
-            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
-            expect(result_lille[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-            expect(result_agen[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-            expect(result_grenoble[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-            expect(result_toulouse[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
-          end
-        end
-      end
-
-      context "when negative on year 1" do
-        context "when year 1" do
+        context "when negative on year 1" do
           it "returns the net taxable property amount" do
             result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 0, 1)
             result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 1)
@@ -385,136 +348,76 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
             expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
           end
         end
+      end
 
-        context "when year 2" do
+      describe "#calc_deductible_expenses_sum(simulation, investment_fiscal_year)" do
+        it "returns deductible expenses" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 1)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 1)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 1)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 1)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 1)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 1)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 1)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 1)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 1)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 1)
+          expect(result_lyon).to be_within(0.01).of(55_607.91)
+          expect(result_bordeaux).to be_within(0.01).of(8_815.08)
+          expect(result_nimes).to be_within(0.01).of(156_921.46)
+          expect(result_lille).to be_within(0.01).of(4_564.66)
+          expect(result_agen).to be_within(0.01).of(10_313.92)
+          expect(result_grenoble).to be_within(0.01).of(13_372.40)
+          expect(result_toulouse).to be_within(0.01).of(2_037.72)
+          expect(result_limoges).to be_within(0.01).of(39_129.20)
+          expect(result_rennes).to be_within(0.01).of(58_546.17)
+          expect(result_tours).to be_within(0.01).of(34_073.44)
         end
       end
-    end
 
-    describe "#calc_deductible_expenses_sum(simulation, investment_fiscal_year)" do
-      it "returns deductible expenses for year 1" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 1)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 1)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 1)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 1)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 1)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 1)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 1)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 1)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 1)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 1)
-        expect(result_lyon).to be_within(0.01).of(55_607.91)
-        expect(result_bordeaux).to be_within(0.01).of(8_815.08)
-        expect(result_nimes).to be_within(0.01).of(156_921.46)
-        expect(result_lille).to be_within(0.01).of(4_564.66)
-        expect(result_agen).to be_within(0.01).of(10_313.92)
-        expect(result_grenoble).to be_within(0.01).of(13_372.40)
-        expect(result_toulouse).to be_within(0.01).of(2_037.72)
-        expect(result_limoges).to be_within(0.01).of(39_129.20)
-        expect(result_rennes).to be_within(0.01).of(58_546.17)
-        expect(result_tours).to be_within(0.01).of(34_073.44)
+      describe "#calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)" do
+        it "returns the gross taxable property income amount" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lyon, 55_607.91, 0)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_bordeaux, 8_815.08, 0)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_nimes, 156_921.46, 0)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lille, 4_564.66, 0)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_agen, 10_313.92, 0)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_grenoble, 13_372.40, 0)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_toulouse, 2_037.72, 0)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_limoges, 39_129.20, 0)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_rennes, 58_546.17, 0)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_tours, 34_073.44, 0)
+          expect(result_lyon).to be_within(0.01).of(-32_407.91)
+          expect(result_bordeaux).to be_within(0.01).of(-739.08)
+          expect(result_nimes).to be_within(0.01).of(-82_121.46)
+          expect(result_lille).to be_within(0.01).of(2_705.34)
+          expect(result_agen).to be_within(0.01).of(18_630.08)
+          expect(result_grenoble).to be_within(0.01).of(387.60)
+          expect(result_toulouse).to be_within(0.01).of(3_470.28)
+          expect(result_limoges).to be_within(0.01).of(-6_969.20)
+          expect(result_rennes).to be_within(0.01).of(-32_486.17)
+          expect(result_tours).to be_within(0.01).of(-9_529.44)
+        end
       end
 
-      it "returns deductible expenses for year 2" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 2)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 2)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 2)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 2)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 2)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 2)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 2)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 2)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 2)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 2)
-        expect(result_lyon).to be_within(0.01).of(15_607.91)
-        expect(result_bordeaux).to be_within(0.01).of(3_815.08)
-        expect(result_nimes).to be_within(0.01).of(31_921.46)
-        expect(result_lille).to be_within(0.01).of(2_064.66)
-        expect(result_agen).to be_within(0.01).of(10_313.92)
-        expect(result_grenoble).to be_within(0.01).of(3_372.40)
-        expect(result_toulouse).to be_within(0.01).of(2_037.72)
-        expect(result_limoges).to be_within(0.01).of(14_129.20)
-        expect(result_rennes).to be_within(0.01).of(8_546.17)
-        expect(result_tours).to be_within(0.01).of(9_073.44)
-      end
-    end
-
-    describe "#calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)" do
-      it "returns the gross taxable property income amount for year 1" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lyon, 55_607.91, 0)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_bordeaux, 8_815.08, 0)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_nimes, 156_921.46, 0)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lille, 4_564.66, 0)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_agen, 10_313.92, 0)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_grenoble, 13_372.40, 0)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_toulouse, 2_037.72, 0)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_limoges, 39_129.20, 0)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_rennes, 58_546.17, 0)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_tours, 34_073.44, 0)
-        expect(result_lyon).to be_within(0.01).of(-32_407.91)
-        expect(result_bordeaux).to be_within(0.01).of(-739.08)
-        expect(result_nimes).to be_within(0.01).of(-82_121.46)
-        expect(result_lille).to be_within(0.01).of(2_705.34)
-        expect(result_agen).to be_within(0.01).of(18_630.08)
-        expect(result_grenoble).to be_within(0.01).of(387.60)
-        expect(result_toulouse).to be_within(0.01).of(3_470.28)
-        expect(result_limoges).to be_within(0.01).of(-6_969.20)
-        expect(result_rennes).to be_within(0.01).of(-32_486.17)
-        expect(result_tours).to be_within(0.01).of(-9_529.44)
+      describe "#calc_property_income_minus_loan_interet_cost(simulation)" do
+        it "returns the property income minus loan interest cost for year 1" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_lyon)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_bordeaux)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_nimes)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_limoges)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_rennes)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_tours)
+          expect(result_lyon).to be_within(0.01).of(17_700.09)
+          expect(result_bordeaux).to be_within(0.01).of(6_848.58)
+          expect(result_nimes).to be_within(0.01).of(65_930.54)
+          expect(result_limoges).to be_within(0.01).of(29_639.20)
+          expect(result_rennes).to be_within(0.01).of(23_725.93)
+          expect(result_tours).to be_within(0.01).of(21_743.12)
+        end
       end
 
-      it "returns the gross taxable property income amount for year 2" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lyon, 15_607.91, 21_707.91)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_bordeaux, 3_815.08, 0)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_nimes, 31_921.46, 71_421.46)
-        result_lille = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lille, 2_064.66, 0)
-        result_agen = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_agen, 10_313.92, 0)
-        result_grenoble = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_grenoble, 3_372.40, 0)
-        result_toulouse = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_toulouse, 2_037.72, 0)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_limoges, 14_129.20, 0)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_rennes, 8_546.17, 21_786.17)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_tours, 9_073.44, 0)
-        expect(result_lyon).to be_within(0.01).of(-14_115.82)
-        expect(result_bordeaux).to be_within(0.01).of(4_260.92)
-        expect(result_nimes).to be_within(0.01).of(-28_542.92)
-        expect(result_lille).to be_within(0.01).of(5_205.34)
-        expect(result_agen).to be_within(0.01).of(18_630.08)
-        expect(result_grenoble).to be_within(0.01).of(10_387.60)
-        expect(result_toulouse).to be_within(0.01).of(3_470.28)
-        expect(result_limoges).to be_within(0.01).of(18_030.80)
-        expect(result_rennes).to be_within(0.01).of(-4_272.34)
-        expect(result_tours).to be_within(0.01).of(15_470.56)
-      end
-    end
-
-    describe "#calc_property_income_minus_loan_interet_cost(simulation)" do
-      it "returns the property income minus loan interest cost for year 1" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_lyon)
-        result_bordeaux = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_bordeaux)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_nimes)
-        result_limoges = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_limoges)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_rennes)
-        result_tours = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_tours)
-        expect(result_lyon).to be_within(0.01).of(17_700.09)
-        expect(result_bordeaux).to be_within(0.01).of(6_848.58)
-        expect(result_nimes).to be_within(0.01).of(65_930.54)
-        expect(result_limoges).to be_within(0.01).of(29_639.20)
-        expect(result_rennes).to be_within(0.01).of(23_725.93)
-        expect(result_tours).to be_within(0.01).of(21_743.12)
-      end
-
-      it "returns the property income minus loan interest cost for year 2" do
-        result_lyon = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_lyon)
-        result_nimes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_nimes)
-        result_rennes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_rennes)
-        expect(result_lyon).to be_within(0.01).of(17_700.09)
-        expect(result_nimes).to be_within(0.01).of(65_930.54)
-        expect(result_rennes).to be_within(0.01).of(23_725.93)
-      end
-    end
-
-    describe "#calc_net_taxable_property_income_repartition(simulation, gross_taxable_property_income_amount)" do
-      context "when year 1" do
+      describe "#calc_net_taxable_property_income_repartition(simulation, gross_taxable_property_income_amount)" do
         it "returns the net taxable property amount" do
           result_lyon = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_repartition(simulation_lyon, -32_407.91)
           result_bordeaux = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_repartition(simulation_bordeaux, -739.08)
@@ -560,8 +463,182 @@ RSpec.describe FrenchTaxSystem::NueFormulas do
           expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
         end
       end
+    end
 
-      context "when year 2" do
+    context "when year 2" do
+      describe "#calc_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+        it "returns a nice hash" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lyon, 0, 2)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_bordeaux, 0, 2)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_nimes, 0, 2)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_lille, 0, 2)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_agen, 0, 2)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_limoges, 0, 2)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_rennes, 0, 2)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_amount(simulation_tours, 0, 2)
+          expect(result_lyon).to be_a(Hash)
+          expect(result_bordeaux).to be_a(Hash)
+          expect(result_nimes).to be_a(Hash)
+          expect(result_lille).to be_a(Hash)
+          expect(result_agen).to be_a(Hash)
+          expect(result_grenoble).to be_a(Hash)
+          expect(result_toulouse).to be_a(Hash)
+          expect(result_limoges).to be_a(Hash)
+          expect(result_rennes).to be_a(Hash)
+          expect(result_tours).to be_a(Hash)
+        end
+      end
+
+      describe "#calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation, postponed_negative_taxable_property_income_from_previous_fiscal_year, investment_fiscal_year)" do
+        context "when positive on year 1" do
+          it "returns the net taxable property income amount" do
+            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
+            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
+            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
+            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
+            expect(result_lille[:net_taxable_property_income_amount]).to be_within(0.01).of(5_205.34)
+            expect(result_agen[:net_taxable_property_income_amount]).to be_within(0.01).of(18_630.08)
+            expect(result_grenoble[:net_taxable_property_income_amount]).to be_within(0.01).of(10_387.60)
+            expect(result_toulouse[:net_taxable_property_income_amount]).to be_within(0.01).of(3_470.28)
+          end
+
+          it "returns false for negative_net_taxable_income_amount? key" do
+            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
+            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
+            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
+            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
+            expect(result_lille[:negative_taxable_property_income?]).to eq(false)
+            expect(result_agen[:negative_taxable_property_income?]).to eq(false)
+            expect(result_grenoble[:negative_taxable_property_income?]).to eq(false)
+            expect(result_toulouse[:negative_taxable_property_income?]).to eq(false)
+          end
+
+          it "returns the negative net taxable income amount to postpone to the next fiscal year" do
+            result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lille, 0, 2)
+            result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_agen, 0, 2)
+            result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_grenoble, 0, 2)
+            result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_toulouse, 0, 2)
+            expect(result_lille[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_agen[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_grenoble[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_toulouse[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+          end
+        end
+
+        context "when negative on year 1" do
+          it "returns the net taxable property amount" do
+            result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 21_707.91, 2)
+            result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 2)
+            result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_nimes, 71_421.46, 2)
+            result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_limoges, 0, 2)
+            result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_rennes, 21_786.17, 2)
+            result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_tours, 0, 2)
+            expect(result_lyon[:net_taxable_property_income_amount]).to be_within(0.01).of(-10_700)
+            expect(result_bordeaux[:net_taxable_property_income_amount]).to be_within(0.01).of(4_260.92)
+            expect(result_nimes[:net_taxable_property_income_amount]).to be_within(0.01).of(-10_700.00)
+            expect(result_limoges[:net_taxable_property_income_amount]).to be_within(0.01).of(18_030.80)
+            expect(result_rennes[:net_taxable_property_income_amount]).to be_within(0.01).of(-4_272.34)
+            expect(result_tours[:net_taxable_property_income_amount]).to be_within(0.01).of(15_470.56)
+          end
+
+          it "returns true for negative_net_taxable_income_amount? key" do
+            result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 21_707.91, 2)
+            result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 2)
+            result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_nimes, 71_421.46, 2)
+            result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_limoges, 0, 2)
+            result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_rennes, 21_786.17, 2)
+            result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_tours, 0, 2)
+            expect(result_lyon[:negative_taxable_property_income?]).to eq(true)
+            expect(result_bordeaux[:negative_taxable_property_income?]).to eq(false)
+            expect(result_nimes[:negative_taxable_property_income?]).to eq(true)
+            expect(result_limoges[:negative_taxable_property_income?]).to eq(false)
+            expect(result_rennes[:negative_taxable_property_income?]).to eq(true)
+            expect(result_tours[:negative_taxable_property_income?]).to eq(false)
+          end
+
+          it "returns the negative net taxable income amount to postpone to the next fiscal year" do
+            result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_lyon, 21_707.91, 2)
+            result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_bordeaux, 0, 2)
+            result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_nimes, 71_421.46, 2)
+            result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_limoges, 0, 2)
+            result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_rennes, 21_786.17, 2)
+            result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_regimen_net_taxable_property_income_amount(simulation_tours, 0, 2)
+            expect(result_lyon[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(3_415.82)
+            expect(result_bordeaux[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_nimes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(17_842.92)
+            expect(result_limoges[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_rennes[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+            expect(result_tours[:negative_taxable_property_income_amount_to_postpone]).to be_within(0.01).of(0)
+          end
+        end
+      end
+
+      describe "#calc_deductible_expenses_sum(simulation, investment_fiscal_year)" do
+        it "returns deductible expenses" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lyon, 2)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_bordeaux, 2)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_nimes, 2)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_lille, 2)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_agen, 2)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_grenoble, 2)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_toulouse, 2)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_limoges, 2)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_rennes, 2)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_deductible_expenses_sum(simulation_tours, 2)
+          expect(result_lyon).to be_within(0.01).of(15_607.91)
+          expect(result_bordeaux).to be_within(0.01).of(3_815.08)
+          expect(result_nimes).to be_within(0.01).of(31_921.46)
+          expect(result_lille).to be_within(0.01).of(2_064.66)
+          expect(result_agen).to be_within(0.01).of(10_313.92)
+          expect(result_grenoble).to be_within(0.01).of(3_372.40)
+          expect(result_toulouse).to be_within(0.01).of(2_037.72)
+          expect(result_limoges).to be_within(0.01).of(14_129.20)
+          expect(result_rennes).to be_within(0.01).of(8_546.17)
+          expect(result_tours).to be_within(0.01).of(9_073.44)
+        end
+      end
+
+      describe "#calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)" do
+        it "returns the gross taxable property income amount" do
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lyon, 15_607.91, 21_707.91)
+          result_bordeaux = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_bordeaux, 3_815.08, 0)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_nimes, 31_921.46, 71_421.46)
+          result_lille = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_lille, 2_064.66, 0)
+          result_agen = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_agen, 10_313.92, 0)
+          result_grenoble = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_grenoble, 3_372.40, 0)
+          result_toulouse = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_toulouse, 2_037.72, 0)
+          result_limoges = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_limoges, 14_129.20, 0)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_rennes, 8_546.17, 21_786.17)
+          result_tours = FrenchTaxSystem::NueFormulas.calc_gross_taxable_property_income_amount(simulation_tours, 9_073.44, 0)
+          expect(result_lyon).to be_within(0.01).of(-14_115.82)
+          expect(result_bordeaux).to be_within(0.01).of(4_260.92)
+          expect(result_nimes).to be_within(0.01).of(-28_542.92)
+          expect(result_lille).to be_within(0.01).of(5_205.34)
+          expect(result_agen).to be_within(0.01).of(18_630.08)
+          expect(result_grenoble).to be_within(0.01).of(10_387.60)
+          expect(result_toulouse).to be_within(0.01).of(3_470.28)
+          expect(result_limoges).to be_within(0.01).of(18_030.80)
+          expect(result_rennes).to be_within(0.01).of(-4_272.34)
+          expect(result_tours).to be_within(0.01).of(15_470.56)
+        end
+      end
+
+      describe "#calc_property_income_minus_loan_interet_cost(simulation)" do
+        it "returns the property income minus loan interest cost" do
+          # Only needed for those which have negative net taxable income
+          result_lyon = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_lyon)
+          result_nimes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_nimes)
+          result_rennes = FrenchTaxSystem::NueFormulas.calc_property_income_minus_loan_interet_cost(simulation_rennes)
+          expect(result_lyon).to be_within(0.01).of(17_700.09)
+          expect(result_nimes).to be_within(0.01).of(65_930.54)
+          expect(result_rennes).to be_within(0.01).of(23_725.93)
+        end
+      end
+
+      describe "#calc_net_taxable_property_income_repartition(simulation, gross_taxable_property_income_amount)" do
+        # Only needed for those which have negative net taxable income
         it "returns the net taxable property amount" do
           result_lyon = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_repartition(simulation_lyon, -14_115.82)
           result_nimes = FrenchTaxSystem::NueFormulas.calc_net_taxable_property_income_repartition(simulation_nimes, -28_542.92)
