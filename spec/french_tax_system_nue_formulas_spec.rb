@@ -870,6 +870,7 @@ RSpec.describe FrenchTaxSystem do
           expect(result_agen[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(17_319.92) # Same year 1
           expect(result_grenoble[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(6_571.73)
           expect(result_toulouse[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(0) # Same year 1
+          puts result_limoges
           expect(result_limoges[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(37_799.188)
           expect(result_rennes[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(0) # Income tax is less than 62 euros
           expect(result_tours[1][:income_tax][:income_tax_amount]).to be_within(0.01).of(14_927.068)
