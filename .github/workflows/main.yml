@@ -15,4 +15,4 @@ jobs:
       run: |
         gem install bundler -v 2.2.15
         bundle install
-        bundle exec rake
+        bundle exec rspec
