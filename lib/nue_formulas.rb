@@ -152,7 +152,7 @@ module FrenchTaxSystem
       if property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: gross_taxable_property_income_amount,
-          negative_taxable_property_income?: gross_taxable_property_income_amount.negative?,
+          negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: 0
         }
       elsif property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT

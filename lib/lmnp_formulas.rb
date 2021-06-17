@@ -6,7 +6,8 @@ module FrenchTaxSystem
 
     # Constants
     PROPERTY_INCOME_STANDARD_ALLOWANCE = 0.5
-    AVERAGE_AMORTIZATION_DURATION = 33
+    AVERAGE_AMORTIZATION_PROPERTY_DURATION = 33.00
+    AVERAGE_AMORTIZATION_FIRST_WORKS_DURATION = 20.00
 
     # Methods
     # Calculate the net taxable income generated from the property investment
@@ -83,10 +84,13 @@ module FrenchTaxSystem
       deductible_expenses = calc_deductible_expenses_sum(simulation, investment_fiscal_year)
 
       # Calculate amortization for average property
-      amortization = calc_amortization(simulation, AVERAGE_AMORTIZATION_DURATION)
+      amortization_property = calc_amortization(simulation[:house_price_bought_amount], AVERAGE_AMORTIZATION_PROPERTY_DURATION)
+
+      # Calculate amortization for first works
+      amortization_first_works = calc_amortization(simulation[:house_first_works_amount], AVERAGE_AMORTIZATION_FIRST_WORKS_DURATION)
 
       # Calculate gross taxable property income amount depending on fiscal year and with postponed negative taxable property income from previous fiscal year
-      gross_taxable_property_income_amount = calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year) - amortization
+      gross_taxable_property_income_amount = calc_gross_taxable_property_income_amount(simulation, deductible_expenses, amortization_property, amortization_first_works, postponed_negative_taxable_property_income_from_previous_fiscal_year)
 
       if gross_taxable_property_income_amount >= 0
         # Return a hash with corresponding values
@@ -109,8 +113,8 @@ module FrenchTaxSystem
     # @params [Integer] postponed_negative_taxable_property_income_from_previous_fiscal_year the potentiel negative taxable income from the previous fiscal year
     #
     # @return [Float] the gross taxable property income amount
-    def calc_gross_taxable_property_income_amount(simulation, deductible_expenses, postponed_negative_taxable_property_income_from_previous_fiscal_year)
-      simulation[:house_rent_amount_per_year] - deductible_expenses - postponed_negative_taxable_property_income_from_previous_fiscal_year
+    def calc_gross_taxable_property_income_amount(simulation, deductible_expenses, amortization_property, amortization_first_works, postponed_negative_taxable_property_income_from_previous_fiscal_year)
+      simulation[:house_rent_amount_per_year] - deductible_expenses - amortization_property - amortization_first_works - postponed_negative_taxable_property_income_from_previous_fiscal_year
     end
 
     # Calculate the sum of deductible expenses for this fiscal year
@@ -141,13 +145,12 @@ module FrenchTaxSystem
 
     # Calculate the amortization for this fiscal year
     #
-    # @params [Hash] simulation a simulation created by Mini-Keyz app
-    # @options simulation [Integer] :house_price_bought_amount how much was the house bought (euros)
+    # @params [Float] expense an expense to be amortized
     # @params [Integer] amortization_duration indicates the amortization duration which is being used (years)
     #
     # @return [Float] the amortization for this fiscal year (euros)
-    def calc_amortization(simulation, amortization_duration)
-      simulation[:house_price_bought_amount] / amortization_duration
+    def calc_amortization(expense, amortization_duration)
+      expense / amortization_duration
     end
 
     # Calculate and cap if necessary the negative taxable income and postpone negative taxable if remaining
