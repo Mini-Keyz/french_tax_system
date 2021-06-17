@@ -22,6 +22,7 @@ module FrenchTaxSystem
     # @options simulation [Float] :credit_loan_cumulative_interests_paid_for_year_two how much is the credit interest cost for year 2 (euros/year)
     # @options simulation [Float] :credit_loan_insurance_amount_per_year how much is the credit insurance cost (euros/year)
     # @options simulation [String] :fiscal_regimen what fiscal regimen has been chosen
+    # @params [Integer] postponed_negative_taxable_property_income_from_previous_fiscal_year the potentiel negative taxable income from the previous fiscal year
     # @params [Integer] investment_fiscal_year indicates the investment fiscal year on which the calculation is made
     #
     # @return [Hash] fiscal_year* the corresponding year * as requested in @params
@@ -120,7 +121,7 @@ module FrenchTaxSystem
     # @options simulation [Float] :credit_loan_insurance_amount_per_year how much is the credit insurance cost (euros/year)
     # @params [Integer] investment_fiscal_year indicates the investment fiscal year on which the calculation is made
     #
-    # @return [Float] the sum of deductible expenses for this fiscal year
+    # @return [Float] the sum of deductible expenses for this fiscal year (euros)
     def calc_deductible_expenses_sum(simulation, investment_fiscal_year)
       if investment_fiscal_year == 1
         FrenchTaxSystem::REAL_REGIMEN_DEDUCTIBLE_EXPENSES[:fiscal_year1].map do |expense|
@@ -151,7 +152,7 @@ module FrenchTaxSystem
       if property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs <= CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
         {
           net_taxable_property_income_amount: gross_taxable_property_income_amount,
-          negative_taxable_property_income?: gross_taxable_property_income_amount.negative?,
+          negative_taxable_property_income?: true,
           negative_taxable_property_income_amount_to_postpone: 0
         }
       elsif property_income_minus_loan_interet_cost.positive? && gross_taxable_property_income_amount.abs > CAPPED_NEGATIVE_NET_TAXABLE_INCOME_AMOUNT
