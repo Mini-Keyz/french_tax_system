@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    french_tax_system (1.0.0)
+    french_tax_system (1.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -52,4 +52,4 @@ DEPENDENCIES
   rubocop (~> 1.17)
 
 BUNDLED WITH
-   2.2.19
+   2.2.25

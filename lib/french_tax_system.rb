@@ -223,7 +223,7 @@ module FrenchTaxSystem
   #
   # @return [Float] the global net taxable amount (euros)
   def calc_global_net_taxable_amount(simulation, net_taxable_property_income_amount)
-    ((simulation[:fiscal_revenues_p1] + (simulation.key?(:fiscal_revenues_p2) ? simulation[:fiscal_revenues_p2] : 0)) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
+    ((simulation[:fiscal_revenues_p1] + (simulation[:fiscal_revenues_p2].nil? ? 0 : simulation[:fiscal_revenues_p2])) * (1 - REVENUES_STANDARD_ALLOWANCE)) + net_taxable_property_income_amount
   end
 
   # Calculate the household's number of fiscal parts
