@@ -61,6 +61,8 @@ module FrenchTaxSystem
 
   # Methods
 
+  # SIMULATION HASH KEYS ARE SYMBOLS not string
+
   # Calculate the income tax to pay over the years (from first to investment_top_fscail year) with or without the generated income from the property investment
   #
   # @params [Hash] simulation a simulation created by Mini-Keyz app
